@@ -1,0 +1,814 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<venues>
+  <venue id="100">
+    <venuec><![CDATA[大埔公共圖書館]]></venuec>
+    <venuee><![CDATA[Tai Po Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="101">
+    <venuec><![CDATA[屏山天水圍公共圖書館]]></venuec>
+    <venuee><![CDATA[Ping Shan Tin Shui Wai Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="102">
+    <venuec><![CDATA[土瓜灣公共圖書館]]></venuec>
+    <venuee><![CDATA[To Kwa Wan Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="103">
+    <venuec><![CDATA[將軍澳公共圖書館]]></venuec>
+    <venuee><![CDATA[Tseung Kwan O Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="104">
+    <venuec><![CDATA[尖沙咀公共圖書館]]></venuec>
+    <venuee><![CDATA[Tsim Sha Tsui Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="105">
+    <venuec><![CDATA[青衣公共圖書館]]></venuec>
+    <venuee><![CDATA[Tsing Yi Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="106">
+    <venuec><![CDATA[荃灣公共圖書館]]></venuec>
+    <venuee><![CDATA[Tsuen Wan Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="107">
+    <venuec><![CDATA[慈雲山公共圖書館]]></venuec>
+    <venuee><![CDATA[Tsz Wan Shan Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="108">
+    <venuec><![CDATA[屯門公共圖書館]]></venuec>
+    <venuee><![CDATA[Tuen Mun Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="109">
+    <venuec><![CDATA[元州街公共圖書館]]></venuec>
+    <venuee><![CDATA[Un Chau Street Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="11">
+    <venuec><![CDATA[香港體育館]]></venuec>
+    <venuee><![CDATA[Hong Kong Coliseum]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="110">
+    <venuec><![CDATA[黃泥涌公共圖書館]]></venuec>
+    <venuee><![CDATA[Wong Nai Chung Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="111">
+    <venuec><![CDATA[油蔴地公共圖書館]]></venuec>
+    <venuee><![CDATA[Yau Ma Tei Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="112">
+    <venuec><![CDATA[耀東公共圖書館]]></venuec>
+    <venuee><![CDATA[Yiu Tung Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="113">
+    <venuec><![CDATA[元朗公共圖書館]]></venuec>
+    <venuee><![CDATA[Yuen Long Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="1720">
+    <venuec><![CDATA[天水圍北公共圖書館]]></venuec>
+    <venuee><![CDATA[Tin Shui Wai North Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="3110031">
+    <venuec><![CDATA[北區大會堂 (演奏廳)]]></venuec>
+    <venuee><![CDATA[North District Town Hall (Auditorium)]]></venuee>
+    <latitude><![CDATA[22.501639]]></latitude>
+    <longitude><![CDATA[114.128911]]></longitude>
+  </venue>
+  <venue id="3110267">
+    <venuec><![CDATA[北區大會堂 (活動室2)]]></venuec>
+    <venuee><![CDATA[North District Town Hall (Function Room 2)]]></venuee>
+    <latitude><![CDATA[22.501639]]></latitude>
+    <longitude><![CDATA[114.128911]]></longitude>
+  </venue>
+  <venue id="3110565">
+    <venuec><![CDATA[北區大會堂 (活動室1)]]></venuec>
+    <venuee><![CDATA[North District Town Hall (Function Room 1)]]></venuee>
+    <latitude><![CDATA[22.501639]]></latitude>
+    <longitude><![CDATA[114.128911]]></longitude>
+  </venue>
+  <venue id="3210299">
+    <venuec><![CDATA[伊利沙伯體育館 (表演場)]]></venuec>
+    <venuee><![CDATA[Queen Elizabeth Stadium (Arena)]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="357">
+    <venuec><![CDATA[富山公共圖書館]]></venuec>
+    <venuee><![CDATA[Fu Shan Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="36310035">
+    <venuec><![CDATA[沙田大會堂 (演奏廳)]]></venuec>
+    <venuee><![CDATA[Sha Tin Town Hall (Auditorium)]]></venuee>
+    <latitude><![CDATA[22.38136]]></latitude>
+    <longitude><![CDATA[114.18990]]></longitude>
+  </venue>
+  <venue id="36310036">
+    <venuec><![CDATA[沙田大會堂 (文娛廳)]]></venuec>
+    <venuee><![CDATA[Sha Tin Town Hall (Cultural Activities Hall)]]></venuee>
+    <latitude><![CDATA[22.38136]]></latitude>
+    <longitude><![CDATA[114.18990]]></longitude>
+  </venue>
+  <venue id="36310037">
+    <venuec><![CDATA[沙田大會堂 (展覽廳)]]></venuec>
+    <venuee><![CDATA[Sha Tin Town Hall (Exhibition Gallery)]]></venuee>
+    <latitude><![CDATA[22.38136]]></latitude>
+    <longitude><![CDATA[114.18990]]></longitude>
+  </venue>
+  <venue id="36310304">
+    <venuec><![CDATA[沙田大會堂 (舞蹈室)]]></venuec>
+    <venuee><![CDATA[Sha Tin Town Hall (Dance Studio)]]></venuee>
+    <latitude><![CDATA[22.38136]]></latitude>
+    <longitude><![CDATA[114.18990]]></longitude>
+  </venue>
+  <venue id="36310566">
+    <venuec><![CDATA[沙田大會堂 (會議室)]]></venuec>
+    <venuee><![CDATA[Sha Tin Town Hall (Conference Room)]]></venuee>
+    <latitude><![CDATA[22.38136]]></latitude>
+    <longitude><![CDATA[114.18990]]></longitude>
+  </venue>
+  <venue id="36310593">
+    <venuec><![CDATA[沙田大會堂 (演講室1)]]></venuec>
+    <venuee><![CDATA[Sha Tin Town Hall (Lecture Room 1)]]></venuee>
+    <latitude><![CDATA[22.38136]]></latitude>
+    <longitude><![CDATA[114.18990]]></longitude>
+  </venue>
+  <venue id="36310594">
+    <venuec><![CDATA[沙田大會堂 (演講室2)]]></venuec>
+    <venuee><![CDATA[Sha Tin Town Hall (Lecture Room 2)]]></venuee>
+    <latitude><![CDATA[22.38136]]></latitude>
+    <longitude><![CDATA[114.18990]]></longitude>
+  </venue>
+  <venue id="36310920">
+    <venuec><![CDATA[沙田大會堂 (廣場)]]></venuec>
+    <venuee><![CDATA[Sha Tin Town Hall (Plaza)]]></venuee>
+    <latitude><![CDATA[22.38136]]></latitude>
+    <longitude><![CDATA[114.18990]]></longitude>
+  </venue>
+  <venue id="36311771">
+    <venuec><![CDATA[沙田大會堂 (音樂室)]]></venuec>
+    <venuee><![CDATA[Sha Tin Town Hall (Music Studio)]]></venuee>
+    <latitude><![CDATA[22.38136]]></latitude>
+    <longitude><![CDATA[114.18990]]></longitude>
+  </venue>
+  <venue id="4662">
+    <venuec><![CDATA[小西灣公共圖書館]]></venuec>
+    <venuee><![CDATA[Siu Sai Wan Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="50110014">
+    <venuec><![CDATA[香港文化中心 (音樂廳)]]></venuec>
+    <venuee><![CDATA[Hong Kong Cultural Centre (Concert Hall)]]></venuee>
+    <latitude><![CDATA[22.29386]]></latitude>
+    <longitude><![CDATA[114.17053]]></longitude>
+  </venue>
+  <venue id="50110015">
+    <venuec><![CDATA[香港文化中心 (大劇院)]]></venuec>
+    <venuee><![CDATA[Hong Kong Cultural Centre (Grand Theatre)]]></venuee>
+    <latitude><![CDATA[22.29386]]></latitude>
+    <longitude><![CDATA[114.17053]]></longitude>
+  </venue>
+  <venue id="50110016">
+    <venuec><![CDATA[香港文化中心 (劇場)]]></venuec>
+    <venuee><![CDATA[Hong Kong Cultural Centre (Studio Theatre)]]></venuee>
+    <latitude><![CDATA[22.29386]]></latitude>
+    <longitude><![CDATA[114.17053]]></longitude>
+  </venue>
+  <venue id="50117376">
+    <venuec><![CDATA[香港文化中心 (平台工作室)]]></venuec>
+    <venuee><![CDATA[Hong Kong Cultural Centre (Podium Workshop)]]></venuee>
+    <latitude><![CDATA[22.29386]]></latitude>
+    <longitude><![CDATA[114.17053]]></longitude>
+  </venue>
+  <venue id="53">
+    <venuec><![CDATA[香港仔公共圖書館]]></venuec>
+    <venuee><![CDATA[Aberdeen Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="54">
+    <venuec><![CDATA[鴨脷洲公共圖書館]]></venuec>
+    <venuee><![CDATA[Ap Lei Chau Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="55">
+    <venuec><![CDATA[蝴蝶邨公共圖書館]]></venuec>
+    <venuee><![CDATA[Butterfly Estate Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="56">
+    <venuec><![CDATA[柴灣公共圖書館]]></venuec>
+    <venuee><![CDATA[Chai Wan Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="57">
+    <venuec><![CDATA[長洲公共圖書館]]></venuec>
+    <venuee><![CDATA[Cheung Chau Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="58">
+    <venuec><![CDATA[大會堂公共圖書館]]></venuec>
+    <venuee><![CDATA[City Hall Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="59">
+    <venuec><![CDATA[電氣道公共圖書館]]></venuec>
+    <venuee><![CDATA[Electric Road Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="599">
+    <venuec><![CDATA[東涌公共圖書館]]></venuec>
+    <venuee><![CDATA[Tung Chung Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="60">
+    <venuec><![CDATA[花園街公共圖書館]]></venuec>
+    <venuee><![CDATA[Fa Yuen Street Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="61">
+    <venuec><![CDATA[粉嶺公共圖書館]]></venuec>
+    <venuee><![CDATA[Fanling Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="62">
+    <venuec><![CDATA[香港中央圖書館]]></venuec>
+    <venuee><![CDATA[Hong Kong Central Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="6210513">
+    <venuec><![CDATA[香港中央圖書館 (地下演講廳)]]></venuec>
+    <venuee><![CDATA[Hong Kong Central Library (G/F Lecture Theatre)]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="6210646">
+    <venuec><![CDATA[香港中央圖書館 (地下展覽館)]]></venuec>
+    <venuee><![CDATA[Hong Kong Central Library (G/F Exhibition Gallery)]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="63">
+    <venuec><![CDATA[紅磡公共圖書館]]></venuec>
+    <venuee><![CDATA[Hung Hom Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="64">
+    <venuec><![CDATA[九龍城公共圖書館]]></venuec>
+    <venuee><![CDATA[Kowloon City Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="65">
+    <venuec><![CDATA[九龍公共圖書館]]></venuec>
+    <venuee><![CDATA[Kowloon Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="66">
+    <venuec><![CDATA[荔枝角公共圖書館]]></venuec>
+    <venuee><![CDATA[Lai Chi Kok Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="67">
+    <venuec><![CDATA[藍田公共圖書館]]></venuec>
+    <venuee><![CDATA[Lam Tin Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="68">
+    <venuec><![CDATA[瀝源公共圖書館]]></venuec>
+    <venuee><![CDATA[Lek Yuen Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="6824">
+    <venuec><![CDATA[香港體育館(表演場)]]></venuec>
+    <venuee><![CDATA[Hong Kong Coliseum (Arena)]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="6858">
+    <venuec><![CDATA[調景嶺公共圖書館]]></venuec>
+    <venuee><![CDATA[Tiu Keng Leng Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="69">
+    <venuec><![CDATA[駱克道公共圖書館]]></venuec>
+    <venuee><![CDATA[Lockhart Road Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="70">
+    <venuec><![CDATA[樂富公共圖書館]]></venuec>
+    <venuee><![CDATA[Lok Fu Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="71">
+    <venuec><![CDATA[龍興公共圖書館]]></venuec>
+    <venuee><![CDATA[Lung Hing Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="72">
+    <venuec><![CDATA[梅窩公共圖書館]]></venuec>
+    <venuee><![CDATA[Mui Wo Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="73">
+    <venuec><![CDATA[牛池灣公共圖書館]]></venuec>
+    <venuee><![CDATA[Ngau Chi Wan Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="74">
+    <venuec><![CDATA[牛頭角公共圖書館]]></venuec>
+    <venuee><![CDATA[Ngau Tau Kok Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="7434">
+    <venuec><![CDATA[粉嶺南公共圖書館]]></venuec>
+    <venuee><![CDATA[Fanling South Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="75">
+    <venuec><![CDATA[北葵涌公共圖書館]]></venuec>
+    <venuee><![CDATA[North Kwai Chung Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="75010017">
+    <venuec><![CDATA[香港電影資料館 (電影院)]]></venuec>
+    <venuee><![CDATA[Hong Kong Film Archive (Cinema)]]></venuee>
+    <latitude><![CDATA[22.285056]]></latitude>
+    <longitude><![CDATA[114.222075]]></longitude>
+  </venue>
+  <venue id="75010293">
+    <venuec><![CDATA[香港電影資料館 (展覽廳)]]></venuec>
+    <venuee><![CDATA[Hong Kong Film Archive (Exhibition Hall)]]></venuee>
+    <latitude><![CDATA[22.285056]]></latitude>
+    <longitude><![CDATA[114.222075]]></longitude>
+  </venue>
+  <venue id="75011820">
+    <venuec><![CDATA[香港電影資料館 (大堂)]]></venuec>
+    <venuee><![CDATA[Hong Kong Film Archive (Foyer)]]></venuee>
+    <latitude><![CDATA[22.285056]]></latitude>
+    <longitude><![CDATA[114.222075]]></longitude>
+  </venue>
+  <venue id="76">
+    <venuec><![CDATA[南丫島北段公共圖書館]]></venuec>
+    <venuee><![CDATA[North Lamma Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="76810048">
+    <venuec><![CDATA[屯門大會堂 (演奏廳)]]></venuec>
+    <venuee><![CDATA[Tuen Mun Town Hall (Auditorium)]]></venuee>
+    <latitude><![CDATA[22.391810]]></latitude>
+    <longitude><![CDATA[113.976771]]></longitude>
+  </venue>
+  <venue id="76810049">
+    <venuec><![CDATA[屯門大會堂 (文娛廳)]]></venuec>
+    <venuee><![CDATA[Tuen Mun Town Hall (Cultural Activities Hall)]]></venuee>
+    <latitude><![CDATA[22.391810]]></latitude>
+    <longitude><![CDATA[113.976771]]></longitude>
+  </venue>
+  <venue id="76810050">
+    <venuec><![CDATA[屯門大會堂 (展覽廳)]]></venuec>
+    <venuee><![CDATA[Tuen Mun Town Hall (Exhibition Gallery)]]></venuee>
+    <latitude><![CDATA[22.391810]]></latitude>
+    <longitude><![CDATA[113.976771]]></longitude>
+  </venue>
+  <venue id="76810200">
+    <venuec><![CDATA[屯門大會堂 (演講室二號)]]></venuec>
+    <venuee><![CDATA[Tuen Mun Town Hall (Lecture Room 2)]]></venuee>
+    <latitude><![CDATA[22.391810]]></latitude>
+    <longitude><![CDATA[113.976771]]></longitude>
+  </venue>
+  <venue id="76810294">
+    <venuec><![CDATA[屯門大會堂 (舞蹈室)]]></venuec>
+    <venuee><![CDATA[Tuen Mun Town Hall (Dance Studio)]]></venuee>
+    <latitude><![CDATA[22.391810]]></latitude>
+    <longitude><![CDATA[113.976771]]></longitude>
+  </venue>
+  <venue id="76810295">
+    <venuec><![CDATA[屯門大會堂 (音樂室)]]></venuec>
+    <venuee><![CDATA[Tuen Mun Town Hall (Music Studio)]]></venuee>
+    <latitude><![CDATA[22.391810]]></latitude>
+    <longitude><![CDATA[113.976771]]></longitude>
+  </venue>
+  <venue id="76810312">
+    <venuec><![CDATA[屯門大會堂 (會議室)]]></venuec>
+    <venuee><![CDATA[Tuen Mun Town Hall (Conference Room)]]></venuee>
+    <latitude><![CDATA[22.391810]]></latitude>
+    <longitude><![CDATA[113.976771]]></longitude>
+  </venue>
+  <venue id="76810831">
+    <venuec><![CDATA[屯門大會堂 (演講室一號)]]></venuec>
+    <venuee><![CDATA[Tuen Mun Town Hall (Lecture Room (1))]]></venuee>
+    <latitude><![CDATA[22.391810]]></latitude>
+    <longitude><![CDATA[113.976771]]></longitude>
+  </venue>
+  <venue id="77">
+    <venuec><![CDATA[北角公共圖書館]]></venuec>
+    <venuee><![CDATA[North Point Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="7744">
+    <venuec><![CDATA[圓洲角公共圖書館]]></venuec>
+    <venuee><![CDATA[Yuen Chau Kok Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="78">
+    <venuec><![CDATA[石硤尾公共圖書館]]></venuec>
+    <venuee><![CDATA[Shek Kip Mei Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="79">
+    <venuec><![CDATA[坪洲公共圖書館]]></venuec>
+    <venuee><![CDATA[Peng Chau Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="80">
+    <venuec><![CDATA[保安道公共圖書館]]></venuec>
+    <venuee><![CDATA[Po On Road Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="81">
+    <venuec><![CDATA[薄扶林公共圖書館]]></venuec>
+    <venuee><![CDATA[Pok Fu Lam Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="811">
+    <venuec><![CDATA[馬鞍山公共圖書館]]></venuec>
+    <venuee><![CDATA[Ma On Shan Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="8186">
+    <venuec><![CDATA[葵青劇院（黑盒劇場）]]></venuec>
+    <venuee><![CDATA[Black Box Theatre, Kwai Tsing Theatre]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="82">
+    <venuec><![CDATA[鰂魚涌公共圖書館]]></venuec>
+    <venuee><![CDATA[Quarry Bay Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="8265">
+    <venuec><![CDATA[深水埗公共圖書館]]></venuec>
+    <venuee><![CDATA[Sham Shui Po Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="826517385">
+    <venuec><![CDATA[深水埗公共圖書館 (香港中央圖書館多用途展示及閱覽區)]]></venuec>
+    <venuee><![CDATA[Sham Shui Po Public Library (Hong Kong Central Library Multi-Purpose Display and Reading Area
+)]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="8268">
+    <venuec><![CDATA[東九文化中心]]></venuec>
+    <venuee><![CDATA[East Kowloon Cultural Centre]]></venuee>
+    <latitude><![CDATA[22.32427]]></latitude>
+    <longitude><![CDATA[114.21494]]></longitude>
+  </venue>
+  <venue id="826817387">
+    <venuec><![CDATA[東九文化中心 (展隅)]]></venuec>
+    <venuee><![CDATA[East Kowloon Cultural Centre (The Corner)]]></venuee>
+    <latitude><![CDATA[22.32427]]></latitude>
+    <longitude><![CDATA[114.21494]]></longitude>
+  </venue>
+  <venue id="83">
+    <venuec><![CDATA[西貢公共圖書館]]></venuec>
+    <venuee><![CDATA[Sai Kung Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="84">
+    <venuec><![CDATA[鯉魚門公共圖書館]]></venuec>
+    <venuee><![CDATA[Lei Yue Mun Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="85">
+    <venuec><![CDATA[新蒲崗公共圖書館]]></venuec>
+    <venuee><![CDATA[San Po Kong Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="86">
+    <venuec><![CDATA[秀茂坪公共圖書館]]></venuec>
+    <venuee><![CDATA[Sau Mau Ping Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="87">
+    <venuec><![CDATA[沙頭角公共圖書館]]></venuec>
+    <venuee><![CDATA[Sha Tau Kok Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="87110023">
+    <venuec><![CDATA[葵青劇院 (演藝廳)]]></venuec>
+    <venuee><![CDATA[Kwai Tsing Theatre (Auditorium)]]></venuee>
+    <latitude><![CDATA[22.35665]]></latitude>
+    <longitude><![CDATA[114.12623]]></longitude>
+  </venue>
+  <venue id="87110024">
+    <venuec><![CDATA[葵青劇院 (舞蹈室)]]></venuec>
+    <venuee><![CDATA[Kwai Tsing Theatre (Dance Studio)]]></venuee>
+    <latitude><![CDATA[22.35665]]></latitude>
+    <longitude><![CDATA[114.12623]]></longitude>
+  </venue>
+  <venue id="87110026">
+    <venuec><![CDATA[葵青劇院 (排演室)]]></venuec>
+    <venuee><![CDATA[Kwai Tsing Theatre (Rehearsal Room)]]></venuee>
+    <latitude><![CDATA[22.35665]]></latitude>
+    <longitude><![CDATA[114.12623]]></longitude>
+  </venue>
+  <venue id="87110120">
+    <venuec><![CDATA[葵青劇院 (演講室)]]></venuec>
+    <venuee><![CDATA[Kwai Tsing Theatre (Lecture Room)]]></venuee>
+    <latitude><![CDATA[22.35665]]></latitude>
+    <longitude><![CDATA[114.12623]]></longitude>
+  </venue>
+  <venue id="87112562">
+    <venuec><![CDATA[葵青劇院 (黑盒劇場)]]></venuec>
+    <venuee><![CDATA[Kwai Tsing Theatre (Black Box Theatre)]]></venuee>
+    <latitude><![CDATA[22.35665]]></latitude>
+    <longitude><![CDATA[114.12623]]></longitude>
+  </venue>
+  <venue id="87210045">
+    <venuec><![CDATA[荃灣大會堂 (演奏廳)]]></venuec>
+    <venuee><![CDATA[Tsuen Wan Town Hall (Auditorium)]]></venuee>
+    <latitude><![CDATA[22.37109]]></latitude>
+    <longitude><![CDATA[114.11277]]></longitude>
+  </venue>
+  <venue id="87210046">
+    <venuec><![CDATA[荃灣大會堂 (文娛廳)]]></venuec>
+    <venuee><![CDATA[Tsuen Wan Town Hall (Cultural Activities Hall)]]></venuee>
+    <latitude><![CDATA[22.37109]]></latitude>
+    <longitude><![CDATA[114.11277]]></longitude>
+  </venue>
+  <venue id="87210195">
+    <venuec><![CDATA[荃灣大會堂 (展覽館)]]></venuec>
+    <venuee><![CDATA[Tsuen Wan Town Hall (Exhibition Gallery)]]></venuee>
+    <latitude><![CDATA[22.37109]]></latitude>
+    <longitude><![CDATA[114.11277]]></longitude>
+  </venue>
+  <venue id="87310051">
+    <venuec><![CDATA[元朗劇院 (演藝廳)]]></venuec>
+    <venuee><![CDATA[Yuen Long Theatre (Auditorium)]]></venuee>
+    <latitude><![CDATA[22.44152]]></latitude>
+    <longitude><![CDATA[114.02289]]></longitude>
+  </venue>
+  <venue id="87310196">
+    <venuec><![CDATA[元朗劇院 (演講室)]]></venuec>
+    <venuee><![CDATA[Yuen Long Theatre (Lecture Room)]]></venuee>
+    <latitude><![CDATA[22.44152]]></latitude>
+    <longitude><![CDATA[114.02289]]></longitude>
+  </venue>
+  <venue id="87310362">
+    <venuec><![CDATA[元朗劇院 (舞蹈室)]]></venuec>
+    <venuee><![CDATA[Yuen Long Theatre (Dance Studio)]]></venuee>
+    <latitude><![CDATA[22.44152]]></latitude>
+    <longitude><![CDATA[114.02289]]></longitude>
+  </venue>
+  <venue id="87310544">
+    <venuec><![CDATA[元朗劇院 (排演室)]]></venuec>
+    <venuee><![CDATA[Yuen Long Theatre (Rehearsal Room)]]></venuee>
+    <latitude><![CDATA[22.44152]]></latitude>
+    <longitude><![CDATA[114.02289]]></longitude>
+  </venue>
+  <venue id="87311966">
+    <venuec><![CDATA[元朗劇院 (活動室)]]></venuec>
+    <venuee><![CDATA[Yuen Long Theatre (Function Room)]]></venuee>
+    <latitude><![CDATA[22.44152]]></latitude>
+    <longitude><![CDATA[114.02289]]></longitude>
+  </venue>
+  <venue id="87315528">
+    <venuec><![CDATA[元朗劇院 (大堂展覽場地)]]></venuec>
+    <venuee><![CDATA[Yuen Long Theatre (Exhibition Corner)]]></venuee>
+    <latitude><![CDATA[22.44152]]></latitude>
+    <longitude><![CDATA[114.02289]]></longitude>
+  </venue>
+  <venue id="87410028">
+    <venuec><![CDATA[牛池灣文娛中心 (文娛廳)]]></venuec>
+    <venuee><![CDATA[Ngau Chi Wan Civic Centre (Cultural Activities Hall)]]></venuee>
+    <latitude><![CDATA[22.334583]]></latitude>
+    <longitude><![CDATA[114.208766]]></longitude>
+  </venue>
+  <venue id="87410030">
+    <venuec><![CDATA[牛池灣文娛中心 (劇院)]]></venuec>
+    <venuee><![CDATA[Ngau Chi Wan Civic Centre (Theatre)]]></venuee>
+    <latitude><![CDATA[22.334583]]></latitude>
+    <longitude><![CDATA[114.208766]]></longitude>
+  </venue>
+  <venue id="87510008">
+    <venuec><![CDATA[香港大會堂 (音樂廳)]]></venuec>
+    <venuee><![CDATA[Hong Kong City Hall (Concert Hall)]]></venuee>
+    <latitude><![CDATA[22.282279]]></latitude>
+    <longitude><![CDATA[114.161545]]></longitude>
+  </venue>
+  <venue id="87510009">
+    <venuec><![CDATA[香港大會堂 (演奏廳)]]></venuec>
+    <venuee><![CDATA[Hong Kong City Hall (Recital Hall)]]></venuee>
+    <latitude><![CDATA[22.282279]]></latitude>
+    <longitude><![CDATA[114.161545]]></longitude>
+  </venue>
+  <venue id="87510010">
+    <venuec><![CDATA[香港大會堂 (劇院)]]></venuec>
+    <venuee><![CDATA[Hong Kong City Hall (Theatre)]]></venuee>
+    <latitude><![CDATA[22.282279]]></latitude>
+    <longitude><![CDATA[114.161545]]></longitude>
+  </venue>
+  <venue id="87510305">
+    <venuec><![CDATA[香港大會堂 (展覽廳)]]></venuec>
+    <venuee><![CDATA[Hong Kong City Hall (Exhibition Hall)]]></venuee>
+    <latitude><![CDATA[22.282279]]></latitude>
+    <longitude><![CDATA[114.161545]]></longitude>
+  </venue>
+  <venue id="87510494">
+    <venuec><![CDATA[香港大會堂 (展覽館)]]></venuec>
+    <venuee><![CDATA[Hong Kong City Hall (Exhibition Gallery)]]></venuee>
+    <latitude><![CDATA[22.282279]]></latitude>
+    <longitude><![CDATA[114.161545]]></longitude>
+  </venue>
+  <venue id="87610118">
+    <venuec><![CDATA[高山劇場 (劇院)]]></venuec>
+    <venuee><![CDATA[Ko Shan Theatre (Theatre)]]></venuee>
+    <latitude><![CDATA[22.31368]]></latitude>
+    <longitude><![CDATA[114.18556]]></longitude>
+  </venue>
+  <venue id="87616551">
+    <venuec><![CDATA[高山劇場 (新翼演藝廳)]]></venuec>
+    <venuee><![CDATA[Ko Shan Theatre (New Wing Auditorium)]]></venuee>
+    <latitude><![CDATA[22.31368]]></latitude>
+    <longitude><![CDATA[114.18556]]></longitude>
+  </venue>
+  <venue id="87617337">
+    <venuec><![CDATA[高山劇場 (新翼活動室)]]></venuec>
+    <venuee><![CDATA[Ko Shan Theatre (New Wing Function Room)]]></venuee>
+    <latitude><![CDATA[22.31368]]></latitude>
+    <longitude><![CDATA[114.18556]]></longitude>
+  </venue>
+  <venue id="87810041">
+    <venuec><![CDATA[上環文娛中心 (演講廳)]]></venuec>
+    <venuee><![CDATA[Sheung Wan Civic Centre (Lecture Hall)]]></venuee>
+    <latitude><![CDATA[22.28602]]></latitude>
+    <longitude><![CDATA[114.14967]]></longitude>
+  </venue>
+  <venue id="87810042">
+    <venuec><![CDATA[上環文娛中心 (劇院)]]></venuec>
+    <venuee><![CDATA[Sheung Wan Civic Centre (Theatre)]]></venuee>
+    <latitude><![CDATA[22.28602]]></latitude>
+    <longitude><![CDATA[114.14967]]></longitude>
+  </venue>
+  <venue id="87810777">
+    <venuec><![CDATA[上環文娛中心 (美術室(1))]]></venuec>
+    <venuee><![CDATA[Sheung Wan Civic Centre (Art Studio (1))]]></venuee>
+    <latitude><![CDATA[22.28602]]></latitude>
+    <longitude><![CDATA[114.14967]]></longitude>
+  </venue>
+  <venue id="87810779">
+    <venuec><![CDATA[上環文娛中心 (美術室(1)及(2))]]></venuec>
+    <venuee><![CDATA[Sheung Wan Civic Centre (Art Studios (1) & (2))]]></venuee>
+    <latitude><![CDATA[22.28602]]></latitude>
+    <longitude><![CDATA[114.14967]]></longitude>
+  </venue>
+  <venue id="88">
+    <venuec><![CDATA[沙田公共圖書館]]></venuec>
+    <venuee><![CDATA[Sha Tin Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="89">
+    <venuec><![CDATA[石塘咀公共圖書館]]></venuec>
+    <venuee><![CDATA[Shek Tong Tsui Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="90">
+    <venuec><![CDATA[石圍角公共圖書館]]></venuec>
+    <venuee><![CDATA[Shek Wai Kok Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="91">
+    <venuec><![CDATA[上水公共圖書館]]></venuec>
+    <venuee><![CDATA[Sheung Shui Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="92">
+    <venuec><![CDATA[瑞和街公共圖書館]]></venuec>
+    <venuee><![CDATA[Shui Wo Street Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="93">
+    <venuec><![CDATA[順利邨公共圖書館]]></venuec>
+    <venuee><![CDATA[Shun Lee Estate Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="94">
+    <venuec><![CDATA[士美非路公共圖書館]]></venuec>
+    <venuee><![CDATA[Smithfield Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="95">
+    <venuec><![CDATA[南葵涌公共圖書館]]></venuec>
+    <venuee><![CDATA[South Kwai Chung Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="96">
+    <venuec><![CDATA[南丫島南段公共圖書館]]></venuec>
+    <venuee><![CDATA[South Lamma Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="969">
+    <venuec><![CDATA[赤柱公共圖書館]]></venuec>
+    <venuee><![CDATA[Stanley Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="97">
+    <venuec><![CDATA[大興公共圖書館]]></venuec>
+    <venuee><![CDATA[Tai Hing Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="98">
+    <venuec><![CDATA[大角咀公共圖書館]]></venuec>
+    <venuee><![CDATA[Tai Kok Tsui Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+  <venue id="99">
+    <venuec><![CDATA[大澳公共圖書館]]></venuec>
+    <venuee><![CDATA[Tai O Public Library]]></venuee>
+    <latitude />
+    <longitude />
+  </venue>
+</venues>
