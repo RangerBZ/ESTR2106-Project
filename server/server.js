@@ -3,10 +3,12 @@ const express = require('express');
 const cors  = require('cors');
 const xml2js = require('xml2js');
 const parser = new xml2js.Parser();
+require('dotenv').config({ path: '../.env' });
 const app = express();
 const mongoose = require('mongoose');
 app.use(cors());
-mongoose.connect(process.env.MONGO_URI);
+//console.log(process.env.MONGO_URL)
+mongoose.connect(process.env.MONGO_URL);
 
 
 async function fetchAndParse(url){
