@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 //console.log(process.env.MONGO_URL)
-mongoose.connect('mongodb://127.0.0.1:27017/assignment3');
+mongoose.connect(process.env.MONGO_URL);
 
 
 async function fetchAndParse(url){
@@ -136,6 +136,7 @@ db.once('open', () => {
 
 async function userSetup(){
     try{
+    await User.deleteMany({});
     await User.create({
         username: process.env.ADMIN_NAME,
         password: process.env.ADMIN_PASSWORD,
@@ -470,4 +471,4 @@ app.delete('admin/users/:username',authenticateToken, async(req, res)=>{
 
 });
 const PORT = process.env.PORT;
-const server = app.listen(3001);
+const server = app.listen(PORT);
