@@ -1,14 +1,9 @@
 import React  from 'react';
 import './../styles/Events.css';
-import { useParams } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useLocation,useParams} from 'react-router-dom';
 import {FaSort} from "react-icons/fa"
 
 class Locations extends React.Component {
-    constructor(props){
-        super(props);
-        this.state={num:0};
-    }
-
     async loading(text){
         for(let i=0;i<text.length;i++){
             let row=document.createElement("tr");
@@ -18,7 +13,7 @@ class Locations extends React.Component {
             p1.textContent=text[i].locId;
             row.appendChild(p1);
 
-            let p2=document.createElement("td");
+            let p2=document.createElement("a");
             p2.textContent=text[i].name;
             row.appendChild(p2);
 
@@ -77,7 +72,7 @@ class Locations extends React.Component {
         let text_sort=[];
         let index=0;
         for(let i=0;i<text.length;i++){
-            if(text[i].name.includes(content)){
+            if(this.satisfy(text[i].name,content)){
                 text_sort[index]=text[i];
                 index++;
             }
@@ -95,8 +90,45 @@ class Locations extends React.Component {
         this.loading(text_sort);
     }
 
+    sort(){        
+        let table=document.getElementById("table");
+
+        let j=1;
+        const length=table.childNodes.length;
+        while(j<length){
+            for(let k=1;k<length-j;k++){
+                if(parseInt(table.childNodes[k].childNodes[2].textContent)>parseInt(table.childNodes[k+1].childNodes[2].textContent)){
+                    let tmp=table.childNodes[k+1];
+                    table.insertBefore(tmp,table.childNodes[k]);
+                }                
+            }
+            j++;
+        }
+    }
+
+    satisfy(s1,s2){
+        let count=0;
+        let record=0;
+
+        for(let i=0;i<s2.length;i++){
+            for(let j=record;j<s1.length;j++){
+                if(s2.charAt(i)==s1.charAt(j).toUpperCase()||s2.charAt(i)==s1.charAt(j).toLowerCase()){
+                    count++;
+                    record=j+1;
+                    break;
+                }
+            }
+        }
+
+        if(count==s2.length)
+            return true;
+        else
+            return false;
+    }
+
     render(){
         this.init();
+
         return(
         <div className='Locations'>
             <p style={{fontSize:"x-large",fontFamily:"-moz-initial"}}>Location list
@@ -115,11 +147,12 @@ class Locations extends React.Component {
                         </button>
                     </th>
                     <th>Add to Favourites</th>
-                </tr>
+                </tr>           
                 </tbody>
             </table>           
         </div>
         );
+        
     }
 }
 
