@@ -1,7 +1,6 @@
 import React  from 'react';
 import './../styles/Events.css';
 import { BrowserRouter, Routes, Route, Link, useLocation,useParams} from 'react-router-dom';
-import {FaSort} from "react-icons/fa"
 
 class Locations extends React.Component {
     async loading(text){
@@ -24,6 +23,8 @@ class Locations extends React.Component {
             let p4=document.createElement("td");
             let p4_inner=document.createElement("input");
             p4_inner.type="checkbox";
+            p4_inner.checked = JSON.parse(localStorage.getItem('favourites') || '[]').includes(text[i].locId);
+            p4_inner.addEventListener('change', () => this.handleFavourite(text[i].locId));
             p4.appendChild(p4_inner);
             row.appendChild(p4);
 
@@ -125,6 +126,19 @@ class Locations extends React.Component {
         else
             return false;
     }
+    
+    handleFavourite = locId => {
+        const favourites = JSON.parse(localStorage.getItem('favourites') || '[]');
+        const index = favourites.indexOf(locId);
+
+        if (index > -1) {
+            favourites.splice(index, 1);
+        } else {
+            favourites.push(locId);
+        }
+
+        localStorage.setItem('favourites', JSON.stringify(favourites));
+    }
 
     render(){
         this.init();
@@ -133,7 +147,7 @@ class Locations extends React.Component {
         <div className='Locations'>
             <p style={{fontSize:"x-large",fontFamily:"-moz-initial"}}>Location list
             <input type="text" placeholder="Search.." style={{marginLeft:"65vw",fontSize:"17px"}} id="search"></input>
-            <button onClick={()=>this.search()} style={{fontSize:"middle"}} className="btn btn-info">search</button>
+            <button onClick={()=>this.search()} style={{fontSize:"middle"}}>search</button>
             </p>
             <table style={{width:"100%"}}>
                 <tbody id="table">
@@ -142,8 +156,7 @@ class Locations extends React.Component {
                     <th>Locations</th>
                     <th>
                         Num of Events
-                        <button className='btn btn-info' onClick={()=>this.sort()}>
-                        <FaSort></FaSort>
+                        <button  onClick={()=>this.sort()}>
                         </button>
                     </th>
                     <th>Add to Favourites</th>
