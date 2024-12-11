@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 //console.log(process.env.MONGO_URL)
-mongoose.connect(process.env.MONGO_URL);
+mongoose.connect('mongodb://127.0.0.1:27017/assignment3');
 
 
 async function fetchAndParse(url){
@@ -470,4 +470,4 @@ app.delete('admin/users/:username',authenticateToken, async(req, res)=>{
 
 });
 const PORT = process.env.PORT;
-const server = app.listen(PORT);
+const server = app.listen(3001);
