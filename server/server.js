@@ -3,10 +3,15 @@ const express = require('express');
 const cors  = require('cors');
 const xml2js = require('xml2js');
 const parser = new xml2js.Parser();
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 require('dotenv').config({ path: '../.env' });
 const app = express();
 const mongoose = require('mongoose');
 app.use(cors());
+app.use(express.json());
+app.use(cookieParser());
 //console.log(process.env.MONGO_URL)
 mongoose.connect(process.env.MONGO_URL);
 
@@ -92,9 +97,59 @@ db.once('open', () => {
             type: Boolean
         }// true or false
     });
+
+    const UserSchema = mongoose.Schema({
+        username: {
+            type: String,
+            requried: true,
+            unique: true
+        },
+        password: {
+            type: String,
+            required: true
+        },
+        admin: {
+            type: Boolean,
+            required: true
+        }
+    });
+
+    UserSchema.pre('save', async function (next) {
+        if (!this.isModified('password')) return next();
+    
+        try {
+            const salt = await bcrypt.genSalt(10);
+            this.password = await bcrypt.hash(this.password, salt);
+            next();
+        } catch (error) {
+            next(error); // Pass errors to Express error handler
+        }
+    });
+
+    UserSchema.methods.matchPassword = async function (enteredPassword) {
+        return await bcrypt.compare(enteredPassword, this.password);
+    };
     
     const Event = mongoose.model('Event', EventSchema);
     const Location = mongoose.model('Location', LocationSchema);
+    const User = mongoose.model('User', UserSchema);
+
+async function userSetup(){
+    try{
+    await User.create({
+        username: process.env.ADMIN_NAME,
+        password: process.env.ADMIN_PASSWORD,
+        admin: true
+    });
+    await User.create({
+        username: 'wocBin',
+        password: 'Bilibili_cheers_qwq',
+        admin: false
+    });
+}catch(error){
+        console.log(error);
+    }
+}
 
 async function clearData(){
         await Event.deleteMany({});
@@ -117,6 +172,9 @@ async function processData(){
             const eTitle = String(element.titlee);
             const lId = Number(element.venueid);
             const date = String(element.predateE);
+            let presenter = "";
+            if(element.presenterorge)
+                presenter = String(element.presenterorge);
 
             // Increment locSet.lId safely
             if (!(String(lId) in locSet)) {
@@ -136,6 +194,7 @@ async function processData(){
                     locId: lId,
                     date: date,
                     description: description,
+                    presenter: presenter,
                     price: typeof price === 'number' && !isNaN(price) ? price : undefined
                 })
             );
@@ -171,8 +230,8 @@ async function processData(){
         );
     }
     await Promise.all(locationPromises);
-    console.log(locSet);
-    console.log(cnt);
+    //console.log(locSet);
+    //console.log(cnt);
     } catch(error){
         console.log(error);
     }
@@ -180,8 +239,68 @@ async function processData(){
 
 clearData();
 processData();
+userSetup();
 
-app.get('/events/all', async (req, res) => {
+// if login as new user, then is the same as the register
+app.post('/login', async (req, res) => {
+    try{
+        const { username, password } = req.body;
+        const existing = await User.findOne({username: {$eq: username}});
+        if(!existing){
+            res.status(400).send('Invalid user');
+        }else{
+            if(!existing.matchPassword(password))
+                res.status(400).send('Incorrect password');
+            const token = jwt.sign({id: existing._id, admin: existing.admin}, process.env.JWT_SECRET, { expiresIn: '2h'});
+            clearData();
+            processData();
+            res.cookie('jwt', token, {
+                httpOnly: true,
+                sameSite: 'strict',
+                maxAge: 7200000
+            });
+            res.status(202).json({message: 'Login successful', user: { username: existing.username, admin: existing.admin}});
+        }
+    }catch(error){
+        res.status(500).send(error);
+    }
+});
+
+app.post('/register', async (req, res) => {
+    try{
+    const { username, password } = req.body;
+    const existing = await User.findOne({username: {$eq: username}});
+    if(!existing)
+        res.status(400).send('Duplicate username');
+    else{
+        const newUser = new User({ username: username, password: password, admin: false});
+        await newUser.save();
+        res.status(201).send('User resgistered successfully');
+    }}catch(error){
+        res.status(500).send(error);
+    }
+});
+
+app.post('/logout', (req, res) => {
+    // Clear the JWT cookie
+    res.clearCookie('jwt');
+    res.json({ message: 'Logged out successfully' });
+});
+
+const authenticateToken = (req, res, next) => {
+    const token = req.cookies.jwt;
+
+    if (!token) return res.sendStatus(401);
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403);
+        next();
+    });
+};
+
+// Apply middleware to protected routes
+
+app.get('/events/all', authenticateToken, async (req, res) => {
     try{
         const partialEvents = await Event.find({});
         res.status(200).json(partialEvents);
@@ -190,7 +309,7 @@ app.get('/events/all', async (req, res) => {
     }
 });
 
-app.get('/events/:eventID', async (req, res) => {
+app.get('/events/:eventID', authenticateToken, async (req, res) => {
     try{
     const eventID = Number(req.params.eventID);
     const result = await Event.findOne({ eventId: { $eq: eventID }});
@@ -202,7 +321,7 @@ app.get('/events/:eventID', async (req, res) => {
 }
 });
 
-app.get('/locations/show', async (req, res) => {
+app.get('/locations/show', authenticateToken, async (req, res) => {
     try{
         const locationShown = await Location.find({ shown: { $eq: true} });
         res.status(200).json(locationShown);
@@ -211,7 +330,7 @@ app.get('/locations/show', async (req, res) => {
     }
 });
 
-app.get('/location/:locationID', async(req, res) => {
+app.get('/location/:locationID', authenticateToken, async(req, res) => {
     try{
         const id = req.params.locationID;
         const locationGet = await Location.findOne({ locId: {$eq: id} });
@@ -220,6 +339,132 @@ app.get('/location/:locationID', async(req, res) => {
             res.status(404).send('location not found');
     }catch(err){
         res.send(err);
+    }
+});
+
+app.post('/admin/newEvent', authenticateToken, async(req, res) => {
+    try{
+    const eventID = Number(req.body.eventID);
+    const title = req.body.eventTitle;
+    const locID = Number(req.body.locationID);
+    const date = req.body.date;
+    const description = req.body.description;
+    const presenter = req.body.presenter;
+    const price = Number(req.body.price);
+    const check = await Event.findOne({ eventId: eventID });
+    if(check){
+        res.status(400).send('Duplicate eventID, please use a valid one');
+    }
+    else{
+        await Event.create({
+            eventId: eventID,
+            title: title,
+            locId: locID,
+            date: date,
+            description: description,
+            presenter: presenter,
+            price: price
+        });
+        res.status(200).send('Event created successfully');
+    }
+}catch(error){
+    console.log(error);
+}
+});
+
+app.post('/admin/modifyEvent', authenticateToken, async(req, res)=>{
+    try{
+        const eventID = Number(req.body.eventID);
+    const title = req.body.eventTitle;
+    const locID = Number(req.body.locationID);
+    const date = req.body.date;
+    const description = req.body.description;
+    const presenter = req.body.presenter;
+    const price = Number(req.body.price);
+    const result = await Event.findOneAndUpdate(
+        {eventId:{$eq: eventID}},
+        {title: title},
+        {locId: locID},
+        {date: date},
+        {description: description},
+        {presenter: presenter},
+        {price: price}
+    );
+    if(!result)
+        res.status(404).send('Event not found!');
+    res.status(200).send('Event modified successfully');
+    }catch(error){
+        console.log(error);
+    }
+});
+
+app.delete('/admin/events/:eventID', authenticateToken, async(req, res) => {
+    try{
+        const eventID = Number(req.params.eventID);
+        // there could be cases when title is the same, and it is not convenient for String to compare
+        const result = await Event.findOneAndDelete({ eventId: {$eq: eventID}});
+        if(!result)
+            res.status(404).send('Event not found!');
+        res.status(200).send('Event deleted');
+    }catch(err){
+        console.log(err);
+    }
+});
+
+app.post('/admin/modifyUser', authenticateToken, async(req, res) => {
+    try{
+        const username = req.body.name;
+        const password = req.body.password;
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        const result = await User.findOneAndUpdate(
+            {username: username},
+            {password: hashedPassword}
+        ); // should auto-finding any matching value...
+        if(!result)
+            res.status(404).send('User not found!');
+        res.status(200).send('User modified successfully');
+    }catch(err){
+        console.log(err);
+    }
+});
+
+app.post('admin/loadUser', authenticateToken, async (req, res) =>{
+    try{
+        const username = req.body.name;
+        const result = await User.findOne({ username: { $eq: username} });
+        if(!result) res.status(404).send('User not found!');
+        res.status(200).json(result);
+    }catch(err){
+        console.log(err);
+    }
+});// could only send the hashed version of the data
+
+app.post('admin/createUser',authenticateToken, async(req, res) => {
+    try{
+        const username = req.body.name;
+        const password = req.body.password;
+        const admin = req.body.admin;
+        await User.create({
+            username: username,
+            password: password,
+            admin: admin
+        });
+        res.status(200).send('User created');
+    }catch(error){
+        res.status(500).send(error);
+    }
+});
+
+app.delete('admin/users/:username',authenticateToken, async(req, res)=>{
+    try{
+        const username = req.params.username;
+        const result = User.findOneAndDelete({username: {$eq: username}});
+        if(!result)
+            res.status(404).send('User not found!');
+        res.status(200).send('User deleted successfully');
+    }catch(error){
+        console.log(err);
     }
 });
 
