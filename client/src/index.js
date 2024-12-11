@@ -5,6 +5,7 @@ import Events from './components/Events';
 import Locations from './components/Locations';
 import Favourites from './components/Favourites';
 import Others from './components/Others';
+import Map from './components/Map'
 // import ComponentName from './components/...'
 
 class App extends React.Component {
@@ -51,6 +52,7 @@ class App extends React.Component {
                     <Route path="/" element={<Home />}/>
                     <Route path="/events" element={<Events />}/>
                     <Route path="/locations" element={<Locations />}/>
+                    <Route path="/map" element={<Map />}/>
                     <Route path="/favourites" element={<Favourites />}/>
                     <Route path="/others" element={<Others />}/>
                 </Routes>

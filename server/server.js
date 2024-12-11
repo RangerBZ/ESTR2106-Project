@@ -331,7 +331,7 @@ app.get('/locations/show', authenticateToken, async (req, res) => {
     }
 });
 
-app.get('/location/:locationID', authenticateToken, async(req, res) => {
+app.get('/locations/:locationID', authenticateToken, async(req, res) => {
     try{
         const id = req.params.locationID;
         const locationGet = await Location.findOne({ locId: {$eq: id} });
