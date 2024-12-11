@@ -8,7 +8,7 @@ const app = express();
 const mongoose = require('mongoose');
 app.use(cors());
 //console.log(process.env.MONGO_URL)
-mongoose.connect(process.env.MONGO_URL);
+mongoose.connect('mongodb://127.0.0.1:27017/assignment3');
 
 
 async function fetchAndParse(url){
@@ -117,6 +117,7 @@ async function processData(){
             const eTitle = String(element.titlee);
             const lId = Number(element.venueid);
             const date = String(element.predateE);
+            const presenter = String(element.presenterorge);
 
             // Increment locSet.lId safely
             if (!(String(lId) in locSet)) {
@@ -136,6 +137,7 @@ async function processData(){
                     locId: lId,
                     date: date,
                     description: description,
+                    presenter:presenter,
                     price: typeof price === 'number' && !isNaN(price) ? price : undefined
                 })
             );
@@ -225,4 +227,4 @@ app.get('/location/:locationID', async(req, res) => {
 
 });
 const PORT = process.env.PORT;
-const server = app.listen(PORT);
+const server = app.listen(3001);

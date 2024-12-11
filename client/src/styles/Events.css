@@ -2,3 +2,39 @@
     background-color:azure;
     padding: 4vh;
 } 
+
+.events-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    margin: 0;
+}
+
+.price-filter {
+    display: flex,inline-block;
+    align-items: center;
+}
+
+.price-filter label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.price-filter input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100px;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  .like-cell {
+    text-align: center;        
+    vertical-align: middle;   
+}
