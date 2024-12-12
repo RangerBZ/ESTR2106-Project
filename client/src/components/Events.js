@@ -19,6 +19,7 @@ class Events extends React.Component {
         try {
             const response = await fetch('http://localhost:3001/events/all', {
                 method: 'GET',
+                credentials: 'include'
             }); // Assuming the backend provides an API to get all events
             const data = await response.json();
             const eventsWithLiked = data.map(event => ({

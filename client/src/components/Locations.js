@@ -37,6 +37,7 @@ class Locations extends React.Component {
         
         const response = await fetch('http://localhost:3001/locations/show', { 
             method: 'GET',
+            credentials: 'include'
         });
 
         let text=await response.json();
