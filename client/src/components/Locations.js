@@ -1,190 +1,218 @@
+// location.js
 import React from 'react';
 import './../styles/Events.css';
+import './../styles/Locations.css';
 import { Link } from 'react-router-dom';
 
 class Locations extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            allLocations_last:[],
-            allLocations: [],
-            allEvents: [], 
-            isLoading: true, 
-            error: null,
-            checked:false,
-        };
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true,
+      error: null,
+      checked: false,
+      categories: ['All'],
+    };
+  }
+
+  componentDidMount() {
+    try {
+      // Extract unique categories from location names
+      const categoriesSet = new Set(['All']);
+      this.props.allLocationsOriginal.forEach(location => {
+        const categoryMatch = location.name.match(/\(([^)]+)\)$/);
+        if (categoryMatch && categoryMatch[1]) {
+          categoriesSet.add(categoryMatch[1].trim());
+        }
+      });
+      const categories = Array.from(categoriesSet);
+
+      this.setState({
+        categories,
+        isLoading: false,
+      });
+    } catch (error) {
+      console.error('Error processing categories:', error);
+      this.setState({ error: error.message, isLoading: false });
+    }
+  }
+
+  getNum = (events, id) => {
+    return events.filter(event => event.locId === id).length;
+  }
+
+  sortAscending = () => {
+    this.props.setFilters({
+      ...this.props.filters,
+      sortOrder: 'asc'
+    });
+  }
+
+  sortDescending = () => {
+    this.props.setFilters({
+      ...this.props.filters,
+      sortOrder: 'desc'
+    });
+  }
+
+  handleFavourite = locId => {
+    const favourites = JSON.parse(localStorage.getItem('favourites') || '[]');
+    const index = favourites.indexOf(locId);
+
+    if (index > -1) {
+      favourites.splice(index, 1);
+    } else {
+      favourites.push(locId);
     }
 
-    async componentDidMount() {
-        try {
-            const [locationsResponse, eventsResponse] = await Promise.all([
-                fetch('http://localhost:3001/locations/show'),
-                fetch('http://localhost:3001/events/all'),
-            ]);
+    localStorage.setItem('favourites', JSON.stringify(favourites));
+    this.setState(prevState => ({ checked: !prevState.checked }));
+  }
 
-            if (!locationsResponse.ok) {
-                throw new Error('Failed to fetch locations');
-            }
+  handleSearchChange = (event) => {
+    this.props.setFilters({
+      ...this.props.filters,
+      searchText: event.target.value
+    });
+  }
 
-            if (!eventsResponse.ok) {
-                throw new Error('Failed to fetch events');
-            }
+  handleCategoryChange = (event) => {
+    this.props.setFilters({
+      ...this.props.filters,
+      selectedCategory: event.target.value
+    });
+  }
 
-            const allLocations = await locationsResponse.json();
-            const allEvents = await eventsResponse.json();
-            let allLocations_last=[];
-            for(let i=0;i<allLocations.length;i++){
-                allLocations_last[i]=allLocations[i];
-            }
+  handleDistanceChange = (event) => {
+    this.props.setFilters({
+      ...this.props.filters,
+      distance: Number(event.target.value)
+    });
+  }
 
-            this.setState({
-                allLocations_last,
-                allLocations,
-                allEvents,
-                isLoading: false,
-            });
-        } catch (error) {
-            console.error('Error loading favourites:', error);
-            this.setState({ error: error.message, isLoading: false });
-        }
+  render() {
+    const { isLoading, error, categories } = this.state;
+    const { filters, allLocations, allEvents } = this.props;
+
+    if (isLoading) {
+      return <div className='Favourites'><p>Loading...</p></div>;
     }
 
-    search(text){
-        let content=document.getElementById("search").value;
-        console.log(content);
-
-        let text_sort=[];
-        let index=0;
-        for(let i=0;i<text.length;i++){
-            if(this.satisfy(text[i].name,content)){
-                text_sort[index]=text[i];
-                index++;
-            }
-        }
-
-        this.setState({allLocations:text_sort});
+    if (error) {
+      return <div className='Favourites'><p>Error: {error}</p></div>;
     }
 
-    satisfy(s1,s2){
-        let count=0;
-        let record=0;
+    return (
+      <div className='locations-container'>
+        {/* Left Section: Location List Title */}
+        <div className='left-section'>
+          <h2 className="location-title">Location List</h2>
+        </div>
 
-        for(let i=0;i<s2.length;i++){
-            for(let j=record;j<s1.length;j++){
-                if(s2.charAt(i)==s1.charAt(j).toUpperCase()||s2.charAt(i)==s1.charAt(j).toLowerCase()){
-                    count++;
-                    record=j+1;
-                    break;
-                }
-            }
-        }
+        {/* Right Section: Filters */}
+        <div className='right-section'>
+          {/* Filter by Distance */}
+          <div className='filter-item distance-filter'>
+            <label htmlFor="distance-slider" className='filter-label'>Filter by Distance</label>
+            <input
+              type="range"
+              id="distance-slider"
+              min="1"
+              max="25"
+              value={filters.distance}
+              onChange={this.handleDistanceChange}
+              className='distance-slider'
+            />
+            <span className='distance-value'>{filters.distance} km</span>
+          </div>
 
-        if(count==s2.length)
-            return true;
-        else
-            return false;
-    }
+          {/* Filter by Category */}
+          <div className='filter-item category-filter'>
+            <label htmlFor="category-filter" className='filter-label'>Filter by Category</label>
+            <select
+              id="category-filter"
+              value={filters.selectedCategory}
+              onChange={this.handleCategoryChange}
+              className='category-select'
+            >
+              {categories.map((category, index) => (
+                  <option key={index} value={category}>{category}</option>
+              ))}
+            </select>
+          </div>
 
-    getNum(text2,id){
-        let count=0;
-
-        for(let i=0;i<text2.length;i++){
-            if(text2[i].locId==id){
-                count++;               
-            }
-        }
-
-        return count;
-    }
-
-    sort(text,text2){        
-        
-        const length=text.length;
-        let j=0;
-        while(j<length){
-            for(let k=0;k<length-j-1;k++){
-                if(this.getNum(text2,text[k].locId)>this.getNum(text2,text[k+1].locId)){
-                    let tmp=text[k];
-                    text[k]=text[k+1];
-                    text[k+1]=tmp;
-                }                
-            }
-            j++;
-        }
-        console.log(text);
-
-        this.setState({allLocations:text});
-    }
-
-    handleFavourite = locId => {
-        const favourites = JSON.parse(localStorage.getItem('favourites') || '[]');
-        const index = favourites.indexOf(locId);
-
-        if (index > -1) {
-            favourites.splice(index, 1);
-        } else {
-            favourites.push(locId);
-        }
-
-        localStorage.setItem('favourites', JSON.stringify(favourites));
-        this.setState({checked:this.state.checked==false?true:false});
-    }
-
-    render() {
-        const { allLocations_last,allLocations, allEvents, isLoading, error } = this.state;
-
-        if (isLoading) {
-            return <div className='Favourites'><p>Loading...</p></div>;
-        }
-
-        if (error) {
-            return <div className='Favourites'><p>Error: {error}</p></div>;
-        }
-
-        return (
-            <div className='Locations'>
-                <h2 style={{fontSize:"x-large",fontFamily:"-moz-initial"}}>Location list
-                <input type="text" placeholder="Search.." style={{marginLeft:"75vw",fontSize:"17px"}} id="search"></input>
-                <button onClick={()=>this.search(allLocations_last)} style={{fontSize:"middle"}} className='btn btn-info'>search</button>
-                </h2>
-                {allLocations.length > 0 ? (
-                    <table style={{ width: "100%" }}>
-                        <thead>
-                            <tr style={{ borderBottom: "solid" }}>
-                                <th>ID</th>
-                                <th>Location</th>
-                                <th>Num of Events
-                                    <button  onClick={()=>this.sort(allLocations,allEvents)} className='btn btn-secondary'></button>
-                                </th>
-                                <th>Add to Favourites</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {allLocations.map(favourite => 
-                                (
-                                <tr key={favourite.locId} style={{ borderBottom: "dashed" }}>
-                                    <td>{favourite.locId}</td>
-                                    <td>
-                                        <Link to={`/locations/${favourite.locId}`}>{favourite.name}</Link>
-                                    </td>
-                                    <td>{this.getNum(allEvents,favourite.locId)}</td>       
-                                    <td>
-                                        <input
-                                            type="checkbox"
-                                            onChange={()=>this.handleFavourite(favourite.locId)}
-                                            checked ={JSON.parse(localStorage.getItem('favourites') || '[]').includes(favourite.locId)}
-                                        />
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                ) : (
-                    <p>No such location!</p>
-                )}
+          {/* Search Section */}
+          <div className='filter-item search-filter'>
+            <label htmlFor="search" className='filter-label'>Search for Locations</label>
+            <div className='search-container'>
+              <input
+                type="text"
+                id="search"
+                placeholder="Search..."
+                value={filters.searchText}
+                onChange={this.handleSearchChange}
+                className='search-input'
+              />
             </div>
-        );
-    }
+          </div>
+        </div>
+
+        {/* Table Section */}
+        <div className='table-container'>
+          <table className='locations-table'>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Location</th>
+                <th>
+                  Num of Events
+                  <span className='sort-icons'>
+                    <i
+                      className="bi bi-chevron-up"
+                      onClick={this.sortAscending}
+                      title="Sort Ascending"
+                      aria-label="Sort by ascending number of events"
+                    ></i>
+                    <i
+                      className="bi bi-chevron-down"
+                      onClick={this.sortDescending}
+                      title="Sort Descending"
+                      aria-label="Sort by descending number of events"
+                    ></i>
+                  </span>
+                </th>
+                <th>Add to Favourites</th>
+              </tr>
+            </thead>
+            <tbody>
+              {allLocations.length > 0 ? (
+                allLocations.map(location => (
+                    <tr key={location.locId}>
+                      <td>{location.locId}</td>
+                      <td>
+                        <Link to={`/locations/${location.locId}`}>{location.name}</Link>
+                      </td>
+                      <td>{this.getNum(allEvents, location.locId)}</td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          onChange={() => this.handleFavourite(location.locId)}
+                          checked={JSON.parse(localStorage.getItem('favourites') || '[]').includes(location.locId)}
+                        />
+                      </td>
+                    </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" style={{ textAlign: 'center' }}>No locations match your criteria!</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default Locations;
