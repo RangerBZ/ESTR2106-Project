@@ -9,7 +9,12 @@ const cookieParser = require('cookie-parser');
 require('dotenv').config({ path: '../.env' });
 const app = express();
 const mongoose = require('mongoose');
-app.use(cors());
+const corsOptions = {
+    origin: 'http://localhost:3000', // Specify the exact origin
+    credentials: true // Enable credentials support
+  };
+  
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 //console.log(process.env.MONGO_URL)
@@ -301,7 +306,7 @@ const authenticateToken = (req, res, next) => {
 
 // Apply middleware to protected routes
 
-app.get('/events/all', authenticateToken, async (req, res) => {
+app.get('/events/all',  async (req, res) => {
     try{
         const partialEvents = await Event.find({});
         res.status(200).json(partialEvents);
@@ -310,7 +315,7 @@ app.get('/events/all', authenticateToken, async (req, res) => {
     }
 });
 
-app.get('/events/:eventID', authenticateToken, async (req, res) => {
+app.get('/events/:eventID', async (req, res) => {
     try{
     const eventID = Number(req.params.eventID);
     const result = await Event.findOne({ eventId: { $eq: eventID }});
@@ -322,7 +327,7 @@ app.get('/events/:eventID', authenticateToken, async (req, res) => {
 }
 });
 
-app.get('/locations/show', authenticateToken, async (req, res) => {
+app.get('/locations/show', async (req, res) => {
     try{
         const locationShown = await Location.find({ shown: { $eq: true} });
         res.status(200).json(locationShown);
@@ -331,7 +336,7 @@ app.get('/locations/show', authenticateToken, async (req, res) => {
     }
 });
 
-app.get('/locations/:locationID', authenticateToken, async(req, res) => {
+app.get('/locations/:locationID', async(req, res) => {
     try{
         const id = req.params.locationID;
         const locationGet = await Location.findOne({ locId: {$eq: id} });
