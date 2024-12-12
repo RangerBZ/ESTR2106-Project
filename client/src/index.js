@@ -1,14 +1,15 @@
 import ReactDOM from 'react-dom/client';
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
+
 import Events from './components/Events';
 import Locations from './components/Locations';
+import Map from './components/Map';
 import Favourites from './components/Favourites';
 import Others from './components/Others';
-import Map from './components/Map';
+import SingleLoc from './components/SingleLoc';
+
 import './styles/all.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-// import ComponentName from './components/...'
 
 class App extends React.Component {
 
@@ -27,7 +28,7 @@ class App extends React.Component {
         };
       }
     
-      componentDidMount() {
+    componentDidMount() {
         // Load filters from localStorage
         const storedFilters = JSON.parse(localStorage.getItem('filters'));
         if (storedFilters) {
@@ -36,9 +37,9 @@ class App extends React.Component {
     
         // Fetch locations and events
         this.fetchData();
-      }
+    }
     
-      componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps, prevState) {
         // Check if filters or data have changed
         if (
           prevState.filters !== this.state.filters ||
@@ -49,9 +50,9 @@ class App extends React.Component {
           // Save filters to localStorage
           localStorage.setItem('filters', JSON.stringify(this.state.filters));
         }
-      }
+    }
     
-      fetchData = async () => {
+    fetchData = async () => {
         try {
           const locationsResponse = await fetch('http://localhost:3001/locations/show');
           if (!locationsResponse.ok) throw new Error('Failed to fetch locations');
@@ -66,9 +67,9 @@ class App extends React.Component {
         } catch (error) {
           console.error('Error fetching data:', error);
         }
-      };
+    };
     
-      applyFilters = () => {
+    applyFilters = () => {
         const { allLocations, allEvents, filters } = this.state;
         let filtered = allLocations;
     
@@ -129,11 +130,11 @@ class App extends React.Component {
         }
     
         this.setState({ filteredLocations: filtered });
-      };
+    };
     
-      setFilters = (newFilters) => {
+    setFilters = (newFilters) => {
         this.setState({ filters: newFilters });
-      };
+    };
 
     render(){
         const routerStyle = {
@@ -154,8 +155,8 @@ class App extends React.Component {
 
         return(
             <BrowserRouter>
-                <div >
-                    <ul style={routerStyle}>
+                <div>
+                <ul style={routerStyle}>
                         <li>{' '}
                         <Link to="/" style={linkStyle}>Home</Link>{' '}
                         </li>
@@ -175,21 +176,17 @@ class App extends React.Component {
                         <Link to="/others" style={linkStyle}>No idea?</Link>{' '}
                         </li>
                     </ul>
+                    
                 </div>
 
                 <Routes>
                     <Route path="/" element={<Home />}/>
-                    <Route path="/events" element={<Events />}/>
-                    <Route path="/locations" element={<Locations
-                                                    filters={filters}
-                                                    setFilters={this.setFilters}
-                                                    allLocations={filteredLocations}
-                                                    allLocationsOriginal={allLocations}
-                                                    allEvents={allEvents}
-                                                    />}/>
-                    <Route path="/map" element={<Map locations={filteredLocations}/>}/>
+                    <Route path="/events" element={<Events />}/>                   
+                    <Route path="/locations" element={<Locations />}/>
+                    <Route path="/map" element={<Map />}/>
                     <Route path="/favourites" element={<Favourites />}/>
                     <Route path="/others" element={<Others />}/>
+                    <Route path="/locations/:locId" element={<SingleLoc />}/>
                 </Routes>
             </BrowserRouter>
         );
@@ -200,11 +197,11 @@ class Home extends React.Component{
     render(){
         return(
             <div>
-                <p>???</p>
+                <p>????</p>
             </div>
         )
     }
 }
 
-const root= ReactDOM.createRoot(document.querySelector('#app'));
-root.render(<App />)
+const root = ReactDOM.createRoot(document.querySelector('#app'));
+root.render(<App />);
