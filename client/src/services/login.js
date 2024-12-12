@@ -36,3 +36,5 @@ fetch('https://localhost:3000/protected-route', {
 .then(response => response.json())
 .then(data => console.log(data))
 .catch(error => console.error('Error:', error));*/
+
+export default {login, getAdmin};

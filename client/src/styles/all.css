@@ -1,0 +1,10 @@
+@charset "UTF-8";
+@font-face {
+  font-family: "merriweather";
+  src: url("../../public/images/Merriweather-Light.ttf") format("truetype");
+}
+
+*{
+    font-family: "merriweather", sans-serif;
+    font-size: medium;
+}

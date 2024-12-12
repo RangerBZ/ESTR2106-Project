@@ -5,7 +5,8 @@ import Events from './components/Events';
 import Locations from './components/Locations';
 import Favourites from './components/Favourites';
 import Others from './components/Others';
-import Map from './components/Map'
+import Map from './components/Map';
+import './styles/all.css';
 // import ComponentName from './components/...'
 
 class App extends React.Component {
