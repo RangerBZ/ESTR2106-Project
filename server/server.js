@@ -42,7 +42,7 @@ async function fetchAndParse(url){
     }
 }
 
-
+const qualifySet = [];
 const locSet = {};
 
 const db = mongoose.connection;
@@ -169,7 +169,7 @@ async function processData(){
         eventData = await fetchAndParse('https://www.lcsd.gov.hk/datagovhk/event/events.xml');
         venueData = await fetchAndParse('https://www.lcsd.gov.hk/datagovhk/event/venues.xml');
         //console.log(eventData);
-        partial_events = eventData.events.event.slice(0, 200);
+        partial_events = eventData.events.event.slice(0, 550);
         const eventsPromises = [];
 
     for (const element of partial_events) {
@@ -220,11 +220,28 @@ async function processData(){
             longitude = Number(element.longitude);
             latitude = Number(element.latitude);
         }
-        let display = false;
-        if(locSet[String(vId)] && locSet[String(vId)] >= 3)
-            display = true;
-        if(display)
-            cnt ++;
+        if(longitude != 0 && latitude != 0){
+        let display;
+        display = true;
+        if(!locSet[String(vId)] || locSet[String(vId)] < 3){
+            display = false;
+        }
+        if(display){
+            for(item of qualifySet){
+                //console.log(Math.abs(vId-item.locId));
+                if(Math.abs(vId-item.locId) < 10000)
+                    display = false;
+            }
+            qualifySet.push({
+                locId: vId,
+                name: name,
+                longitude: longitude,
+                latitude: latitude,
+            });
+            if(display){
+                cnt ++;
+            }
+        }
         locationPromises.push(
             Location.create({
                 locId: vId,
@@ -233,11 +250,11 @@ async function processData(){
                 latitude: latitude,
                 shown: display
             })
-        );
+        );}
     }
     await Promise.all(locationPromises);
     //console.log(locSet);
-    //console.log(cnt);
+    console.log(cnt);
     } catch(error){
         console.log(error);
     }
