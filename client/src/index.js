@@ -13,6 +13,7 @@ import { AuthContext, AuthProvider } from './services/AuthContext';
 import Login from './components/Login';
 
 import './styles/all.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 class App extends React.Component {
     static contextType = AuthContext;
@@ -141,63 +142,74 @@ class App extends React.Component {
     };
 
     render(){
-        const {userRole} = this.context;
+      const {userRole,userName} = this.context;
 
-        const routerStyle = {
-            listStyle: 'none',
-            padding: 0,
-            margin: 0,
-            display: 'flex',
-            justifyContent: 'flex-start',
-            gap: '20px' 
-        };
-
-        const linkStyle = {
-            textDecoration: 'none',
-            color: 'black'
-        };
-
-        const headStyle={
-            backgroundColor:"rgb(0,255,255)"
-        }
-
-        const userRoleStyle = {
-          backgroundColor: "lightgrey",
-          borderRadius: "5px",
-          padding: "10px 10px",
-          fontWeight: "bold",
-          display:"inline-block",
+      const routerStyle = {
+        border:"1px solid",
+        backgroundColor:"rgb(245,245,245)",
+        listStyle: 'none',
+        paddingLeft:"1vw",
+        marginTop: "-1vh",
+        marginBottom: 0,
+        display: 'flex',
+        justifyContent: 'flex-start',
+        gap: '20px' 
       };
 
-        const containerStyle = {
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '0 20px' 
+      const linkStyle = {
+        fontSize:"large",
+        textDecoration: 'none',
+        color: 'black'
       };
 
-        const { filters, filteredLocations, allLocations, allEvents } = this.state;
+      const headStyle={
+        backgroundColor:"rgb(204,255,204)",   
+        textAlign:"center",
+        color:"rgb(0,120,255)",
+        fontFamily:"sans-serif"
+      }
 
-        return(
+      const userRoleStyle = {
+        backgroundColor: "lightgrey",
+        borderRadius: "5px",
+        padding: "5px 5px",
+        fontSize:"medium",
+        fontWeight: "bold",
+        display:"inline-block",
+        marginLeft:"auto"
+      };
+
+      const containerStyle = {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '0 20px' 
+      };
+
+      const { filters, filteredLocations, allLocations, allEvents } = this.state;
+
+      return(
             <BrowserRouter>
                 <div>
-                <h2 style={headStyle}>HONG KONG cultural programmes</h2>
-                <div style={containerStyle}>
+                <h2 style={headStyle}>
+                    HONG KONG
+                    <p style={{fontSize:"x-large",fontWeight:"600"}}>Cultural diving</p>
+                </h2>
                   <ul style={routerStyle}>
                         <li>{' '}
-                        <Link to="/" style={linkStyle}><i class="bi bi-house"></i> Home</Link>{' '}
+                        <Link to="/" style={linkStyle}><i className="bi bi-house"></i> Home</Link>{' '}
                         </li>
                         <li>{' '}
-                        <Link to="/events" style={linkStyle}><i class="bi bi-list-columns-reverse"></i> List of Events</Link>{' '}
+                        <Link to="/events" style={linkStyle}><i className="bi bi-list-columns-reverse"></i> List of Events</Link>{' '}
                         </li>
                         <li>{' '}
-                        <Link to="/locations" style={linkStyle}><i class="bi bi-list-columns-reverse"></i> List of Locations</Link>{' '}
+                        <Link to="/locations" style={linkStyle}><i className="bi bi-list-columns-reverse"></i> List of Locations</Link>{' '}
                         </li>
                         <li>{' '}
-                        <Link to="/map" style={linkStyle}><i class="bi bi-map"></i> Map</Link>{' '}
+                        <Link to="/map" style={linkStyle}><i className="bi bi-map"></i> Map</Link>{' '}
                         </li>
                         <li>{' '}
-                        <Link to="/favourites" style={linkStyle}><i class="bi bi-star"></i> Favourites</Link>{' '}
+                        <Link to="/favourites" style={linkStyle}><i className="bi bi-star"></i> Favourites</Link>{' '}
                         </li>
                         <li>{' '}
                         <Link to="/others" style={linkStyle}>No idea?</Link>{' '}
@@ -205,12 +217,10 @@ class App extends React.Component {
                         <li>{' '}
                         <Link to="/admin" style={linkStyle}>Manage database</Link>
                         </li>
-
-                    </ul>
-                  <div style={userRoleStyle}>
-                    {userRole ? "Admin" : "User"}
-                  </div>
-                  </div>
+                        <div style={userRoleStyle}>
+                        {userRole ? "Admin: "+userName : "User: "+userName}
+                        </div>
+                  </ul>
                 </div>
 
                 <Routes>
@@ -226,7 +236,7 @@ class App extends React.Component {
                     <Route path="/map" element={<Map locations={filteredLocations}/>}/>
                     <Route path="/favourites" element={<Favourites />}/>
                     <Route path="/others" element={<Others />}/>
-                    <Route path="/locations/:locId" element={<SingleLoc />}/>
+                    <Route path="/locations/:locId" element={<SingleLoc username={userName}/>}/>
                     {userRole && (
                     <Route path="/admin" element={<Manage/>}/>)}
                 </Routes>
