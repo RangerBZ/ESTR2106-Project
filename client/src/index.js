@@ -157,11 +157,16 @@ class App extends React.Component {
             color: 'black'
         };
 
+        const headStyle={
+            backgroundColor:"rgb(0,255,255)"
+        }
+
         const { filters, filteredLocations, allLocations, allEvents } = this.state;
 
         return(
             <BrowserRouter>
                 <div>
+                <h2 style={headStyle}>HONG KONG cultural programmes</h2>
                 <ul style={routerStyle}>
                         <li>{' '}
                         <Link to="/" style={linkStyle}>Home</Link>{' '}
