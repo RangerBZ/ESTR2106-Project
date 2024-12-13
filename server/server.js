@@ -268,6 +268,7 @@ userSetup();
 app.post('/login', async (req, res) => {
     try{
         const { username, password } = req.body;
+        //console.log(username);
         const existing = await User.findOne({username: {$eq: username}});
         if(!existing){
             res.status(400).send('Invalid user');
@@ -275,12 +276,15 @@ app.post('/login', async (req, res) => {
             if(!existing.matchPassword(password))
                 res.status(400).send('Incorrect password');
             const token = jwt.sign({id: existing._id, admin: existing.admin}, process.env.JWT_SECRET, { expiresIn: '2h'});
-            clearData();
-            processData();
+            //console.log(token);
+            //clearData();
+            //processData();
             res.cookie('jwt', token, {
-                httpOnly: true,
-                sameSite: 'strict',
-                maxAge: 7200000
+                //httpOnly: true,
+                sameSite: 'lax',
+                secure: process.env.NODE_ENV === 'production',
+                maxAge: 7200000,
+                path: '/'
             });
             res.status(202).json({message: 'Login successful', user: { username: existing.username, admin: existing.admin}});
         }
