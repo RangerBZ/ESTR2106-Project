@@ -12,7 +12,7 @@ const containerStyle = {
     border: '2px solid black'
 };
 
-function SingleLoc(){
+function SingleLoc(props){
     const [locations,setLocations]=useState([]);
     const [events,setEvents]=useState([]);
     const [areaVal, setTextVal] = useState('');
@@ -171,7 +171,7 @@ function SingleLoc(){
         newComment.querySelectorAll("div")[0].className = "flex-shrink-0"; 
         newComment.querySelectorAll("div")[1].className = "flex-grow-1"; 
 
-        newComment.querySelector("h5").innerHTML ="User "+count+" said:";
+        newComment.querySelector("h5").innerHTML ="User "+props.username+" said:";
         newComment.querySelector("h5").style.fontSize="large";
         newComment.querySelector("p").innerHTML = areaVal;
         newComment.querySelector("p").style.fontSize="medium";
@@ -200,7 +200,7 @@ function SingleLoc(){
             </div>
 
             <div className='col-5'>
-                <h3 id="comment">Comments for <span style={{color:"purple"}}>{getName()}</span></h3>
+                <h3 id="comment">Comments for <span style={{color:"purple", fontSize:"x-large"}}>{getName()}</span></h3>
                 <h4>Add your own comments!</h4>
                 <textarea style={{width:"40vw", height: "20vh"}} id="new-comment" value={areaVal} onChange={e => setTextVal(e.target.value)}></textarea>
                 <br/>
