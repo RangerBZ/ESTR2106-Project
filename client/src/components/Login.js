@@ -13,36 +13,39 @@ class Login extends React.Component {
         if(success){
             if(getAdmin())
             {
-                this.context.login(true);
+                this.context.login(true,username);
             }
-            else this.context.login(false);
+            else this.context.login(false,username);
             //this.props.navigate('/');
         }
     }
 
     render(){
     return (
-        <div>
-      <h2>Login Page</h2>
-      <form onSubmit={async (e) => { e.preventDefault();await this.handleLogin(); }}>
-        <label htmlFor="name">Username</label><br />
-        <input 
-          type='text' 
-          id="name" 
-          name="name" 
-          required
-        /><br />
+      <div>
+        <br /><br /><br />
+        <h2 style={{textAlign:"center"}}>Login Page</h2>
+        <div className='container'>
+          <form onSubmit={async (e) => { e.preventDefault();await this.handleLogin(); }} style={{marginLeft:'40vw'}}>
+          <label htmlFor="name">Username</label><br />
+          <input 
+            type='text' 
+            id="name" 
+            name="name" 
+            required
+          /><br /><br/>
 
-        <label htmlFor="password">Password</label><br />
-        <input 
-          type='password' // Changed from 'text' to 'password'
-          id="password" 
-          name="password" 
-          required
-        /><br />
+          <label htmlFor="password">Password</label><br />
+          <input 
+            type='password' // Changed from 'text' to 'password'
+            id="password" 
+            name="password" 
+            required
+          /><br /><br/>
 
-        <button id="sub" type="submit">Log In</button>
-      </form>
+          <button id="sub" type="submit">Log In</button>
+          </form>
+        </div>
     </div>
     );
 }
