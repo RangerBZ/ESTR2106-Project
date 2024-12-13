@@ -1,5 +1,7 @@
 /* Locations.css */
 
+
+
 /* Main container for the Locations component */
 .locations-container {
     display: flex;
@@ -18,10 +20,12 @@
 .right-section {
     flex: 2;
     display: flex;
-    align-items: center;
+    align-items:baseline;
     gap: 20px;
     flex-wrap: wrap;
     min-width: 300px;
+    justify-content: flex-end; 
+    padding-right: 20px; 
 }
 
 .filter-label{
@@ -67,9 +71,13 @@
     text-align: left;
 }
 
+.bi-sort-numeric-down-alt,
+.bi-sort-numeric-down {
+    font-size: 22px;
+}
 /* Sort icons styling */
 .sort-icons {
-    display: flex;
+    display: inline;
     align-items: center;
     gap: 5px;
 }
@@ -81,7 +89,7 @@
 }
 
 .sort-icons i:hover {
-    color: #0d6efd; /* Bootstrap primary color on hover */
+    color: #2168d2; /* Bootstrap primary color on hover */
 }
 
 /* Responsive adjustments */
