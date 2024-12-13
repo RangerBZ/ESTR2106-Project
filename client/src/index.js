@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom/client';
 import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useLocation, Navigate} from 'react-router-dom';
 
 import Events from './components/Events';
 import Locations from './components/Locations';
@@ -8,10 +8,14 @@ import Map from './components/Map';
 import Favourites from './components/Favourites';
 import Others from './components/Others';
 import SingleLoc from './components/SingleLoc';
+import Manage from './components/Manage';
+import { AuthContext, AuthProvider } from './services/AuthContext';
+import Login from './components/Login';
 
 import './styles/all.css';
 
 class App extends React.Component {
+    static contextType = AuthContext;
 
     constructor(props) {
         super(props);
@@ -137,6 +141,8 @@ class App extends React.Component {
     };
 
     render(){
+        const {userRole} = this.context;
+
         const routerStyle = {
             listStyle: 'none',
             padding: 0,
@@ -175,6 +181,9 @@ class App extends React.Component {
                         <li>{' '}
                         <Link to="/others" style={linkStyle}>No idea?</Link>{' '}
                         </li>
+                        <li>{' '}
+                        <Link to="/admin" style={linkStyle}>Manage database</Link>
+                        </li>
                     </ul>
                     
                 </div>
@@ -182,11 +191,19 @@ class App extends React.Component {
                 <Routes>
                     <Route path="/" element={<Home />}/>
                     <Route path="/events" element={<Events />}/>                   
-                    <Route path="/locations" element={<Locations />}/>
-                    <Route path="/map" element={<Map />}/>
+                    <Route path="/locations" element={<Locations
+                                                        filters={filters}
+                                                        setFilters={this.setFilters}
+                                                        allLocations={filteredLocations}
+                                                        allLocationsOriginal={allLocations}
+                                                        allEvents={allEvents}
+                                                        />}/>
+                    <Route path="/map" element={<Map locations={filteredLocations}/>}/>
                     <Route path="/favourites" element={<Favourites />}/>
                     <Route path="/others" element={<Others />}/>
                     <Route path="/locations/:locId" element={<SingleLoc />}/>
+                    {userRole && (
+                    <Route path="/admin" element={<Manage/>}/>)}
                 </Routes>
             </BrowserRouter>
         );
@@ -203,5 +220,18 @@ class Home extends React.Component{
     }
 }
 
+class Layer extends React.Component {
+    static contextType = AuthContext;
+
+    render(){
+        console.log(this.context);
+        const { isAuthenticated } = this.context;
+
+        return (isAuthenticated ? <App /> : <Login />);
+    }
+}
+
 const root = ReactDOM.createRoot(document.querySelector('#app'));
-root.render(<App />);
+root.render(<AuthProvider>
+    <Layer />
+  </AuthProvider>);
