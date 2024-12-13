@@ -161,36 +161,56 @@ class App extends React.Component {
             backgroundColor:"rgb(0,255,255)"
         }
 
+        const userRoleStyle = {
+          backgroundColor: "lightgrey",
+          borderRadius: "5px",
+          padding: "10px 10px",
+          fontWeight: "bold",
+          display:"inline-block",
+      };
+
+        const containerStyle = {
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '0 20px' 
+      };
+
         const { filters, filteredLocations, allLocations, allEvents } = this.state;
 
         return(
             <BrowserRouter>
                 <div>
                 <h2 style={headStyle}>HONG KONG cultural programmes</h2>
-                <ul style={routerStyle}>
+                <div style={containerStyle}>
+                  <ul style={routerStyle}>
                         <li>{' '}
-                        <Link to="/" style={linkStyle}>Home</Link>{' '}
+                        <Link to="/" style={linkStyle}><i class="bi bi-house"></i> Home</Link>{' '}
                         </li>
                         <li>{' '}
-                        <Link to="/events" style={linkStyle}>List of Events</Link>{' '}
+                        <Link to="/events" style={linkStyle}><i class="bi bi-list-columns-reverse"></i> List of Events</Link>{' '}
                         </li>
                         <li>{' '}
-                        <Link to="/locations" style={linkStyle}>List of Locations</Link>{' '}
+                        <Link to="/locations" style={linkStyle}><i class="bi bi-list-columns-reverse"></i> List of Locations</Link>{' '}
                         </li>
                         <li>{' '}
-                        <Link to="/map" style={linkStyle}>Map</Link>{' '}
+                        <Link to="/map" style={linkStyle}><i class="bi bi-map"></i> Map</Link>{' '}
                         </li>
                         <li>{' '}
-                        <Link to="/favourites" style={linkStyle}>Favourites</Link>{' '}
+                        <Link to="/favourites" style={linkStyle}><i class="bi bi-star"></i> Favourites</Link>{' '}
                         </li>
                         <li>{' '}
                         <Link to="/others" style={linkStyle}>No idea?</Link>{' '}
-                        </li>
+                        </li>{' '}
                         <li>{' '}
                         <Link to="/admin" style={linkStyle}>Manage database</Link>
                         </li>
+
                     </ul>
-                    
+                  <div style={userRoleStyle}>
+                    {userRole ? "Admin" : "User"}
+                  </div>
+                  </div>
                 </div>
 
                 <Routes>
