@@ -151,11 +151,16 @@ class App extends React.Component {
             color: 'black'
         };
 
+        const headStyle={
+            backgroundColor:"rgb(0,255,255)"
+        }
+
         const { filters, filteredLocations, allLocations, allEvents } = this.state;
 
         return(
             <BrowserRouter>
                 <div>
+                <h2 style={headStyle}>HONG KONG cultural programmes</h2>
                 <ul style={routerStyle}>
                         <li>{' '}
                         <Link to="/" style={linkStyle}>Home</Link>{' '}
@@ -174,7 +179,7 @@ class App extends React.Component {
                         </li>
                         <li>{' '}
                         <Link to="/others" style={linkStyle}>No idea?</Link>{' '}
-                        </li>
+                        </li>{' '}
                     </ul>
                     
                 </div>
@@ -182,8 +187,14 @@ class App extends React.Component {
                 <Routes>
                     <Route path="/" element={<Home />}/>
                     <Route path="/events" element={<Events />}/>                   
-                    <Route path="/locations" element={<Locations />}/>
-                    <Route path="/map" element={<Map />}/>
+                    <Route path="/locations" element={<Locations
+                                                    filters={filters}
+                                                    setFilters={this.setFilters}
+                                                    allLocations={filteredLocations}
+                                                    allLocationsOriginal={allLocations}
+                                                    allEvents={allEvents}
+                                                    />}/>
+                    <Route path="/map" element={<Map locations={filteredLocations}/>}/>
                     <Route path="/favourites" element={<Favourites />}/>
                     <Route path="/others" element={<Others />}/>
                     <Route path="/locations/:locId" element={<SingleLoc />}/>
