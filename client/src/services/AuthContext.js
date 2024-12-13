@@ -6,10 +6,11 @@ export class AuthProvider extends React.Component {
     state = {
       isAuthenticated: false,
       userRole: null,
+      userName: null,
     };
   
-    login = (role) => {
-      this.setState({ isAuthenticated: true, userRole: role });
+    login = (role, username) => {
+      this.setState({ isAuthenticated: true, userRole: role , userName:username});
     };
   
     logout = () => {
@@ -23,4 +24,4 @@ export class AuthProvider extends React.Component {
         </AuthContext.Provider>
       );
     }
-  }
+}
