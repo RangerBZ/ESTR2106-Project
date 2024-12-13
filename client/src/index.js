@@ -141,6 +141,16 @@ class App extends React.Component {
         this.setState({ filters: newFilters });
     };
 
+    handleUserRoleClick = () => {
+      const { isAuthenticated } = this.context;
+      if (isAuthenticated) {
+        const confirmLogout = window.confirm("Do you want to log out?");
+        if (confirmLogout) {
+          this.context.logout();
+        }
+      }
+    };
+
     render(){
       const {userRole,userName} = this.context;
 
@@ -217,7 +227,7 @@ class App extends React.Component {
                         <li>{' '}
                         <Link to="/admin" style={linkStyle}>Manage database</Link>
                         </li>
-                        <div style={userRoleStyle}>
+                        <div style={userRoleStyle} onClick={this.handleUserRoleClick}>
                         {userRole ? "Admin: "+userName : "User: "+userName}
                         </div>
                   </ul>
