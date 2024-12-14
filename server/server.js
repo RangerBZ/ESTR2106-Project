@@ -1,4 +1,3 @@
-//servers-side processing for fetching the data
 const express = require('express');
 const cors  = require('cors');
 const xml2js = require('xml2js');
@@ -119,6 +118,21 @@ db.once('open', () => {
         }
     });
 
+    const CommentSchema= mongoose.Schema({
+        locId: {
+            type: Number,
+            required: true,
+        },
+        name:{
+            type:Array,
+            required: true
+        },
+        context: {
+            type:Array,
+            required: true
+        }
+    })
+
     UserSchema.pre('save', async function (next) {
         if (!this.isModified('password')) return next();
     
@@ -138,6 +152,7 @@ db.once('open', () => {
     const Event = mongoose.model('Event', EventSchema);
     const Location = mongoose.model('Location', LocationSchema);
     const User = mongoose.model('User', UserSchema);
+    const Comment=mongoose.model('Comment',CommentSchema);
 
 async function userSetup(){
     try{
@@ -158,9 +173,13 @@ async function userSetup(){
 }
 
 async function clearData(){
-        await Event.deleteMany({});
-        await Location.deleteMany({});
-    }
+    await Event.deleteMany({});
+    await Location.deleteMany({});
+}
+
+async function clearComment(){
+    await Comment.deleteMany({});
+}
 
 // in total 1024 events, so not all of it?
 async function processData(){
@@ -263,6 +282,7 @@ async function processData(){
 clearData();
 processData();
 userSetup();
+//commentSetup();
 
 // if login as new user, then is the same as the register
 app.post('/login', async (req, res) => {
@@ -494,6 +514,68 @@ app.delete('admin/users/:username',authenticateToken, async(req, res)=>{
         console.log(err);
     }
 });
+
+//saving users' comments
+app.post('/locations/comments',async(req,res)=>{
+    try{
+        let id=req.body.locId;
+        let username=req.body.username;
+        let context=req.body.context;
+
+        let test=await Comment.findOne({locId:{$eq:id}});
+        if(!test){
+            let arr1=[];
+            arr1.push(username);
+            let arr2=[];
+            arr2.push(context);
+
+            Comment.create({
+                locId:id,
+                name:arr1,
+                context:arr2
+            })
+        }else{
+            let info=await Comment.findOne({locId:{$eq:id}});
+            let arr1=info.name;
+            arr1.push(username);
+
+            let arr2=info.context;
+            arr2.push(context);
+            let result=await Comment.findOneAndUpdate({locId:{$eq:id}},{name:arr1,context:arr2})
+
+            console.log(result);
+
+        }
+
+        res.status(200).send("ok!");
+        
+    }catch(error){
+        console.log(error);
+    }
+})
+
+//acquiring users' comments
+app.post('/locations/acquire',async(req,res)=>{
+    try{
+        let id=req.body.locId;       
+        let info=await Comment.findOne({locId:{$eq:id}});
+        
+        if(info!=null){
+            let comments={
+                username:info.name,
+                context:info.context
+            }
+
+            res.status(200).send(comments);
+        }else{           
+            res.status(200).send({});
+        }
+
+    }catch(error){
+        console.log(error);
+    }
+})
+
 
 });
 const PORT = process.env.PORT;
