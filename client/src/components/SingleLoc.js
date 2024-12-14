@@ -16,7 +16,6 @@ function SingleLoc(props){
     const [locations,setLocations]=useState([]);
     const [events,setEvents]=useState([]);
     const [areaVal, setTextVal] = useState('');
-    const [count,setCount]=useState(1);
     const [placesService, setPlacesService] = useState(null); 
     const [map, setMap] = useState(null); // Store the map instance
 
@@ -29,15 +28,58 @@ function SingleLoc(props){
 
     const id=useParams().locId;
 
+    const loadComment=(info)=>{
+        if(info!={}){
+            for(let i=0;i<info.username.length;i++){
+                let colors=["red","orange","yellow","blue","green","pink"];
+                let index=Math.floor((Math.random()*6));
+
+                let newComment = document.createElement("div");
+                let element = '<div><svg height="100" width="100"><circle cx="50" cy="50"r="40"></svg></div> &nbsp &nbsp &nbsp <div><br><h5></h5><p></p></div>';
+                newComment.innerHTML = element;
+                newComment.querySelector("circle").setAttribute("fill", colors[index]);
+
+                newComment.className = "d-flex";
+                newComment.querySelectorAll("div")[0].className = "flex-shrink-0"; 
+                newComment.querySelectorAll("div")[1].className = "flex-grow-1"; 
+
+                newComment.querySelector("h5").innerHTML ="User "+info.username[i]+" said:";
+                newComment.querySelector("h5").style.fontSize="large";
+                newComment.querySelector("p").innerHTML = info.context[i];
+                newComment.querySelector("p").style.fontSize="medium";
+
+                let c=document.getElementById("comment");
+                c.appendChild(newComment);
+            }
+        }
+
+    }
+
     const fetchData=async ()=>{
+        const data={
+            locId:id
+        }
+
         try{
             const response1=await fetch('http://localhost:3001/locations/show');
             const response2=await fetch('http://localhost:3001/events/all');
+            
+            const response3=await fetch('http://localhost:3001/locations/acquire',{
+                method:"POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
             const location=await response1.json();
             const event=await response2.json();
-              
+            const comment=await response3.json();
+                      
             setLocations(location);
             setEvents(event);
+            
+            loadComment(comment);
         }catch(error){
             console.error('Error fetching data:', error.message);    
         }
@@ -158,7 +200,28 @@ function SingleLoc(props){
         }
     }
     
-    const addComments=()=>{
+    const addComments=async ()=>{
+        const data={
+            locId:id,
+            username:props.username,
+            context:areaVal
+        }
+
+        try{           
+            const response=await fetch("http://localhost:3001/locations/comments",{
+                method:"POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            console.log(response);
+        
+        }catch(err){
+            console.log(err);
+        }
+
         let colors=["red","orange","yellow","blue","green","pink"];
         let index=Math.floor((Math.random()*6));
 
@@ -175,8 +238,6 @@ function SingleLoc(props){
         newComment.querySelector("h5").style.fontSize="large";
         newComment.querySelector("p").innerHTML = areaVal;
         newComment.querySelector("p").style.fontSize="medium";
-
-        setCount(count+1);
 
         let c=document.getElementById("comment");
         c.appendChild(newComment);
