@@ -11,6 +11,7 @@ import SingleLoc from './components/SingleLoc';
 import Manage from './components/Manage';
 import { AuthContext, AuthProvider } from './services/AuthContext';
 import Login from './components/Login';
+import Darkmode from 'darkmode-js';
 
 import './styles/all.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -42,6 +43,23 @@ class App extends React.Component {
     
         // Fetch locations and events
         this.fetchData();
+
+        const options = {
+          bottom: '675px', // default: '32px'
+          right: '10px', // default: '32px'
+          left: 'unset', // default: 'unset'
+          time: '0.5s', // default: '0.3s'
+          mixColor: '#fff', // default: '#fff'
+          backgroundColor: '#fff',  // default: '#fff'
+          buttonColorDark: '#100f2c',  // default: '#100f2c'
+          buttonColorLight: '#fff', // default: '#fff'
+          saveInCookies: false, // default: true,
+          label: '🌓', // default: ''
+          autoMatchOsTheme: true // default: true
+        }
+        
+        const darkmode = new Darkmode(options);
+        darkmode.showWidget();
     }
     
     componentDidUpdate(prevProps, prevState) {
@@ -187,13 +205,6 @@ class App extends React.Component {
         fontWeight: "bold",
         display:"inline-block",
         marginLeft:"auto"
-      };
-
-      const containerStyle = {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '0 20px' 
       };
 
       const { filters, filteredLocations, allLocations, allEvents } = this.state;
