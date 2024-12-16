@@ -20,6 +20,28 @@ class Login extends React.Component {
         }
     }
 
+    handleRegister = async() => {
+        const username = document.getElementById('name').value;
+        const password = document.getElementById('password').value;
+        const content = {
+          username: username,
+          password: password
+        }
+        try{
+        const response = await fetch('http://localhost:3001/register', {
+          method: 'POST',
+          body: JSON.stringify(content),
+          headers:{
+            'Content-Type': 'application/json'
+          }
+        });
+        const message = await response.text();
+        alert(message);
+      }catch(err){
+        console.log(err);
+      }
+    }
+
     render(){
     return (
       <div>
@@ -44,6 +66,7 @@ class Login extends React.Component {
           /><br /><br/>
 
           <button id="sub" type="submit">Log In</button>
+          <button type='button' onClick={async() => { await this.handleRegister();}}>Register</button>
           </form>
         </div>
     </div>

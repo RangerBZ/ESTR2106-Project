@@ -279,8 +279,8 @@ async function processData(){
     }
 }
 
-clearData();
-processData();
+//clearData();
+//processData();
 userSetup();
 //commentSetup();
 
@@ -297,8 +297,8 @@ app.post('/login', async (req, res) => {
                 res.status(400).send('Incorrect password');
             const token = jwt.sign({id: existing._id, admin: existing.admin}, process.env.JWT_SECRET, { expiresIn: '2h'});
             //console.log(token);
-            //clearData();
-            //processData();
+            clearData();
+            processData();
             res.cookie('jwt', token, {
                 //httpOnly: true,
                 sameSite: 'lax',
@@ -317,12 +317,12 @@ app.post('/register', async (req, res) => {
     try{
     const { username, password } = req.body;
     const existing = await User.findOne({username: {$eq: username}});
-    if(!existing)
+    if(existing)
         res.status(400).send('Duplicate username');
     else{
-        const newUser = new User({ username: username, password: password, admin: false});
+        const newUser = new User({ username: String(username), password: String(password), admin: false});
         await newUser.save();
-        res.status(201).send('User resgistered successfully');
+        res.status(201).send('User registered successfully');
     }}catch(error){
         res.status(500).send(error);
     }
@@ -335,14 +335,18 @@ app.post('/logout', (req, res) => {
 });
 
 const authenticateToken = (req, res, next) => {
+    try{
     const token = req.cookies.jwt;
-
+    //console.log(token);
     if (!token) return res.sendStatus(401);
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        //console.log(err);
         if (err) return res.sendStatus(403);
         next();
-    });
+    });}catch(error){
+        console.log(error);
+    }
 };
 
 // Apply middleware to protected routes
@@ -392,8 +396,8 @@ app.get('/locations/:locationID', async(req, res) => {
 app.post('/admin/newEvent', authenticateToken, async(req, res) => {
     try{
     const eventID = Number(req.body.eventID);
-    const title = req.body.eventTitle;
-    const locID = Number(req.body.locationID);
+    const title = req.body.title;
+    const locID = Number(req.body.locID);
     const date = req.body.date;
     const description = req.body.description;
     const presenter = req.body.presenter;
@@ -422,20 +426,23 @@ app.post('/admin/newEvent', authenticateToken, async(req, res) => {
 app.post('/admin/modifyEvent', authenticateToken, async(req, res)=>{
     try{
         const eventID = Number(req.body.eventID);
-    const title = req.body.eventTitle;
-    const locID = Number(req.body.locationID);
+    const title = req.body.title;
+    const locID = Number(req.body.locID);
     const date = req.body.date;
     const description = req.body.description;
     const presenter = req.body.presenter;
     const price = Number(req.body.price);
+    //console.log(req.body);
+    //const price2 = 2;
     const result = await Event.findOneAndUpdate(
         {eventId:{$eq: eventID}},
-        {title: title},
-        {locId: locID},
-        {date: date},
-        {description: description},
-        {presenter: presenter},
-        {price: price}
+        {title: title,
+        locId: locID,
+        date: date,
+        description: description,
+        presenter: presenter,
+        price: price},
+        {new: true}
     );
     if(!result)
         res.status(404).send('Event not found!');
@@ -448,11 +455,12 @@ app.post('/admin/modifyEvent', authenticateToken, async(req, res)=>{
 app.delete('/admin/events/:eventID', authenticateToken, async(req, res) => {
     try{
         const eventID = Number(req.params.eventID);
+        //console.log(eventID);
         // there could be cases when title is the same, and it is not convenient for String to compare
         const result = await Event.findOneAndDelete({ eventId: {$eq: eventID}});
         if(!result)
             res.status(404).send('Event not found!');
-        res.status(200).send('Event deleted');
+        else res.status(200).send('Event deleted');
     }catch(err){
         console.log(err);
     }
@@ -460,37 +468,38 @@ app.delete('/admin/events/:eventID', authenticateToken, async(req, res) => {
 
 app.post('/admin/modifyUser', authenticateToken, async(req, res) => {
     try{
-        const username = req.body.name;
-        const password = req.body.password;
+        const username = String(req.body.username);
+        const password = String(req.body.password);
+        //console.log(username);
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         const result = await User.findOneAndUpdate(
-            {username: username},
+            {username: {$eq: username}},
             {password: hashedPassword}
         ); // should auto-finding any matching value...
         if(!result)
             res.status(404).send('User not found!');
-        res.status(200).send('User modified successfully');
+        else res.status(200).send('User modified successfully');
     }catch(err){
         console.log(err);
     }
 });
 
-app.post('admin/loadUser', authenticateToken, async (req, res) =>{
+app.post('/admin/loadUser', authenticateToken, async (req, res) =>{
     try{
         const username = req.body.name;
         const result = await User.findOne({ username: { $eq: username} });
         if(!result) res.status(404).send('User not found!');
-        res.status(200).json(result);
+        else res.status(200).json(result);
     }catch(err){
         console.log(err);
     }
 });// could only send the hashed version of the data
 
-app.post('admin/createUser',authenticateToken, async(req, res) => {
+app.post('/admin/createUser',authenticateToken, async(req, res) => {
     try{
-        const username = req.body.name;
-        const password = req.body.password;
+        const username = String(req.body.username);
+        const password = String(req.body.password);
         const admin = req.body.admin;
         await User.create({
             username: username,
@@ -499,17 +508,18 @@ app.post('admin/createUser',authenticateToken, async(req, res) => {
         });
         res.status(200).send('User created');
     }catch(error){
-        res.status(500).send(error);
+        res.status(500).send('Duplicate or invalid username input!');
     }
 });
 
-app.delete('admin/users/:username',authenticateToken, async(req, res)=>{
+app.delete('/admin/users/:username',authenticateToken, async(req, res)=>{
     try{
-        const username = req.params.username;
+        const username = String(req.params.username);
+        //console.log(username);
         const result = User.findOneAndDelete({username: {$eq: username}});
         if(!result)
             res.status(404).send('User not found!');
-        res.status(200).send('User deleted successfully');
+        else res.status(200).send('User deleted successfully');
     }catch(error){
         console.log(err);
     }

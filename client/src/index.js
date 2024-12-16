@@ -218,26 +218,26 @@ class App extends React.Component {
                 </h2>
                   <ul style={routerStyle}>
                         <li>{' '}
-                        <Link to="/" style={linkStyle}><i className="bi bi-house"></i> Home</Link>{' '}
+                        <Link to="/" style={linkStyle} className='link'><i className="bi bi-house"></i> Home</Link>{' '}
                         </li>
                         <li>{' '}
-                        <Link to="/events" style={linkStyle}><i className="bi bi-list-columns-reverse"></i> List of Events</Link>{' '}
+                        <Link to="/events" style={linkStyle} className='link'><i className="bi bi-list-columns-reverse"></i> List of Events</Link>{' '}
                         </li>
                         <li>{' '}
-                        <Link to="/locations" style={linkStyle}><i className="bi bi-list-columns-reverse"></i> List of Locations</Link>{' '}
+                        <Link to="/locations" style={linkStyle} className='link'><i className="bi bi-list-columns-reverse"></i> List of Locations</Link>{' '}
                         </li>
                         <li>{' '}
-                        <Link to="/map" style={linkStyle}><i className="bi bi-map"></i> Map</Link>{' '}
+                        <Link to="/map" style={linkStyle} className='link'><i className="bi bi-map"></i> Map</Link>{' '}
                         </li>
                         <li>{' '}
-                        <Link to="/favourites" style={linkStyle}><i className="bi bi-star"></i> Favourites</Link>{' '}
+                        <Link to="/favourites" style={linkStyle} className='link'><i className="bi bi-star"></i> Favourites</Link>{' '}
                         </li>
                         <li>{' '}
-                        <Link to="/others" style={linkStyle}>No idea?</Link>{' '}
+                        <Link to="/others" style={linkStyle} className='link'>No idea?</Link>{' '}
                         </li>{' '}
-                        <li>{' '}
-                        <Link to="/admin" style={linkStyle}>Manage database</Link>
-                        </li>
+                        {userRole && (<li>{' '}
+                        <Link to="/admin" style={linkStyle} className='link'>Manage database</Link>
+                        </li>)}
                         <div style={userRoleStyle} onClick={this.handleUserRoleClick}>
                         {userRole ? "Admin: "+userName : "User: "+userName}
                         </div>
@@ -267,10 +267,24 @@ class App extends React.Component {
 }
 
 class Home extends React.Component{
+   constructor(props) {
+    super(props);
+    this.state = {
+        updateTime: null
+    }
+   }
+
+   componentDidMount(){
+     const startTime = String(new Date());
+     this.setState({updateTime: startTime});
+   }
+
     render(){
         return(
             <div>
-                <p>????</p>
+              <div>
+                <p>Data last updated: {this.state.updateTime}</p>
+              </div>
             </div>
         )
     }
