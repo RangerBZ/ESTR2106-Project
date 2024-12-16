@@ -133,6 +133,18 @@ db.once('open', () => {
         }
     })
 
+    const BlacklistSchema=mongoose.Schema({
+        username:{
+            type: String,
+            requried: true,
+            unique: true
+        },
+        blockUsers:{
+            type:Array,
+            required:true
+        }
+    })
+
     UserSchema.pre('save', async function (next) {
         if (!this.isModified('password')) return next();
     
@@ -153,6 +165,7 @@ db.once('open', () => {
     const Location = mongoose.model('Location', LocationSchema);
     const User = mongoose.model('User', UserSchema);
     const Comment=mongoose.model('Comment',CommentSchema);
+    const Blacklist=mongoose.model('Blacklist',BlacklistSchema);
 
 async function userSetup(){
     try{
@@ -567,6 +580,60 @@ app.post('/locations/acquire',async(req,res)=>{
             }
 
             res.status(200).send(comments);
+        }else{           
+            res.status(200).send({});
+        }
+
+    }catch(error){
+        console.log(error);
+    }
+})
+
+//block comments
+app.post('/block/save',async(req,res)=>{
+    try{
+        let username=req.body.username;
+        let blockUser=req.body.blockUser;
+
+        let test=await Blacklist.findOne({username:{$eq:username}});
+        if(!test){
+            let arr=[];
+            arr.push(blockUser);
+
+            Blacklist.create({
+                username:username,
+                blockUsers:arr
+            })
+        }else{
+            let info=await Blacklist.findOne({username:{$eq:username}});
+            let arr=info.blockUsers;
+            arr.push(blockUser);
+
+            let result=await Blacklist.findOneAndUpdate({username:{$eq:username}},{blockUsers:arr})
+
+            console.log(result);
+
+        }
+        
+        res.send("ok");
+
+    }catch(error){
+        console.log(error);
+    }
+})
+
+//acquiring users' blacklists
+app.post('/block/acquire',async(req,res)=>{
+    try{
+        let username=req.body.username;       
+        let info=await Blacklist.findOne({username:{$eq:username}});
+        
+        if(info!=null){
+            let blacklist={
+                blockUsers:info.blockUsers
+            }
+
+            res.status(200).send(blacklist);
         }else{           
             res.status(200).send({});
         }
