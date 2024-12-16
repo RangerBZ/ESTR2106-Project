@@ -59,14 +59,15 @@ function SingleLoc(props){
     }
 
     const load=(info,i)=>{
-        let colors=["red","orange","yellow","blue","green","pink"];
+        let patterns=["cake","backpack","bus-front","cloud-fill","egg-fried","emoji-sunglasses"];
+        let colors=["red","black","orange","green","blue","purple"];
         let index=Math.floor((Math.random()*6));
         
         let newComment = document.createElement("div");
         newComment.id="existing_comments";
-        let element = '<div><svg height="100" width="100"><circle cx="50" cy="50"r="40"></svg></div> &nbsp &nbsp &nbsp <div><br><h5></h5><p></p></div>';
+        
+        let element = '<div><svg height="30" width="30"><i class="bi bi-'+patterns[index]+'" style="font-size:70px"></i></svg></div> &nbsp &nbsp &nbsp &nbsp<div><br><h5><span><span></h5><p></p></div>';
         newComment.innerHTML = element;
-        newComment.querySelector("circle").setAttribute("fill", colors[index]);
         
         newComment.className = "d-flex";
         newComment.querySelectorAll("div")[0].className = "flex-shrink-0";
@@ -93,6 +94,7 @@ function SingleLoc(props){
         
         newComment.querySelector("h5").innerHTML =info.username[i];
         newComment.querySelector("h5").style.fontSize="large";
+        newComment.querySelector("h5").style.color=colors[index];
         newComment.querySelector("p").innerHTML = info.context[i];
         newComment.querySelector("p").style.fontSize="medium";
         
@@ -275,6 +277,22 @@ function SingleLoc(props){
                 return locations[i].longitude;
         }
     }
+
+    const checkEmpty=(comment)=>{
+        let count=0;
+        if(comment=="")
+            return true;
+
+        for(let i=0;i<comment.length;i++){
+           if(comment.charAt(i)==" ")
+            count++;
+        }
+
+        if(count==comment.length)
+            return true;
+        else
+            return false;
+    }
     
     const addComments=async ()=>{
         const data={
@@ -283,7 +301,7 @@ function SingleLoc(props){
             context:areaVal
         }
 
-        if(areaVal!=""){
+        if(!checkEmpty(areaVal)){
             try{           
                 const response=await fetch("http://localhost:3001/locations/comments",{
                     method:"POST",
@@ -300,13 +318,13 @@ function SingleLoc(props){
             }
         }
 
-        let colors=["red","orange","yellow","blue","green","pink"];
+        let patterns=["cake","backpack","bus-front","cloud-fill","egg-fried","emoji-sunglasses"];
+        let colors=["red","black","orange","green","blue","purple"];
         let index=Math.floor((Math.random()*6));
 
         let newComment = document.createElement("div");
-        let element = '<div><svg height="100" width="100"><circle cx="50" cy="50"r="40"></svg></div> &nbsp &nbsp &nbsp <div><br><h5></h5><p></p></div>';
+        let element = '<div><svg height="30" width="30"><i class="bi bi-'+patterns[index]+'" style="font-size:70px"></i></svg></div> &nbsp &nbsp &nbsp &nbsp<div><br><h5></h5><p></p></div>';
         newComment.innerHTML = element;
-        newComment.querySelector("circle").setAttribute("fill", colors[index]);
 
         newComment.className = "d-flex";
         newComment.querySelectorAll("div")[0].className = "flex-shrink-0";
@@ -314,10 +332,11 @@ function SingleLoc(props){
 
         newComment.querySelector("h5").innerHTML =props.username;
         newComment.querySelector("h5").style.fontSize="large";
+        newComment.querySelector("h5").style.color=colors[index];
         newComment.querySelector("p").innerHTML = areaVal;
         newComment.querySelector("p").style.fontSize="medium";
 
-        if(areaVal==""){
+        if(checkEmpty(areaVal)){
             window.alert("Empty comment!Please enter again.")
         }else{
         let c=document.getElementById("comment");
@@ -329,9 +348,9 @@ function SingleLoc(props){
         <div className='SingleLoc'>
         <div className='row'>
             <div className='col-7'>
-                <h3 style={{color:"brown",textAlign:"center"}}>{getName()}</h3>
-                <h5 style={{color:"blueviolet",textAlign:"center"}}>latitude:{getLatitude()}</h5>
-                <h5 style={{color:"blueviolet",textAlign:"center"}}>longitude:{getLongitude()}</h5>
+                <h3 className='title'>{getName()}</h3>
+                <h5 className='geo'>latitude:{getLatitude()}</h5>
+                <h5 className='geo'>longitude:{getLongitude()}</h5>
                 <GoogleMap
                     mapContainerStyle={containerStyle}
                     center={{lat:Number(getLatitude()),lng:Number(getLongitude())}}
@@ -349,7 +368,7 @@ function SingleLoc(props){
                 <br/>
                 <button type="button" className="btn btn-success" onClick={addComments}>Add Comment</button>{' '}
 
-                <button className='btn btn-info'><Link to="../locations" style={{color:"black"}}>back to list</Link></button>
+                <button className='btn btn-info'><Link to="../locations" className='link'>Back to list</Link></button>
             </div>
         </div>
         </div>
