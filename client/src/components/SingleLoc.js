@@ -15,6 +15,7 @@ const containerStyle = {
 function SingleLoc(props){
     const [locations,setLocations]=useState([]);
     const [events,setEvents]=useState([]);
+    const [comments,setComments]=useState({});
     const [areaVal, setTextVal] = useState('');
     const [placesService, setPlacesService] = useState(null); 
     const [map, setMap] = useState(null); // Store the map instance
@@ -28,36 +29,101 @@ function SingleLoc(props){
 
     const id=useParams().locId;
 
-    const loadComment=(info)=>{
+    const blockComment=async (name)=>{
+        const data={
+            username:props.username,
+            blockUser:name
+        }
+
+        try{
+            const response=await fetch('http://localhost:3001/block/save',{
+                method:"POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+        }catch(error){
+            console.log(error);
+        }
+
+    }
+
+    const findName=(name,list)=>{
+        for(let i=0;i<list.length;i++){
+            if(name==list[i])
+                return true;
+        }
+
+        return false;
+    }
+
+    const load=(info,i)=>{
+        let colors=["red","orange","yellow","blue","green","pink"];
+        let index=Math.floor((Math.random()*6));
+        
+        let newComment = document.createElement("div");
+        newComment.id="existing_comments";
+        let element = '<div><svg height="100" width="100"><circle cx="50" cy="50"r="40"></svg></div> &nbsp &nbsp &nbsp <div><br><h5></h5><p></p></div>';
+        newComment.innerHTML = element;
+        newComment.querySelector("circle").setAttribute("fill", colors[index]);
+        
+        newComment.className = "d-flex";
+        newComment.querySelectorAll("div")[0].className = "flex-shrink-0";
+        newComment.querySelectorAll("div")[1].className = "flex-grow-1";
+
+
+        if(info.username[i]!=props.username){
+            let blockButton1=document.createElement("button");
+            blockButton1.style.backgroundColor="rgb(255,255,255)";
+            blockButton1.textContent="block this user";
+            blockButton1.onclick=()=>{
+                newComment.remove();
+                let arr=document.querySelectorAll("#existing_comments");
+                for(let j=0;j<arr.length;j++){
+                    if(arr[j].childNodes[2].childNodes[1].textContent==info.username[i]){
+                        arr[j].remove();
+                    }
+                }
+                blockComment(newComment.querySelector("h5").textContent);
+            }
+
+            newComment.querySelectorAll("div")[1].appendChild(blockButton1);
+        }
+        
+        newComment.querySelector("h5").innerHTML =info.username[i];
+        newComment.querySelector("h5").style.fontSize="large";
+        newComment.querySelector("p").innerHTML = info.context[i];
+        newComment.querySelector("p").style.fontSize="medium";
+        
+        let c=document.getElementById("comment");
+        c.appendChild(newComment);              
+    }
+
+    const loadComment=(info,blacklist)=>{
         if(info!={}){
             for(let i=0;i<info.username.length;i++){
-                let colors=["red","orange","yellow","blue","green","pink"];
-                let index=Math.floor((Math.random()*6));
+                if(blacklist){
+                if(blacklist.blockUsers&&!findName(info.username[i],blacklist.blockUsers)){
+                    load(info,i);     
+                }
 
-                let newComment = document.createElement("div");
-                let element = '<div><svg height="100" width="100"><circle cx="50" cy="50"r="40"></svg></div> &nbsp &nbsp &nbsp <div><br><h5></h5><p></p></div>';
-                newComment.innerHTML = element;
-                newComment.querySelector("circle").setAttribute("fill", colors[index]);
-
-                newComment.className = "d-flex";
-                newComment.querySelectorAll("div")[0].className = "flex-shrink-0"; 
-                newComment.querySelectorAll("div")[1].className = "flex-grow-1"; 
-
-                newComment.querySelector("h5").innerHTML ="User "+info.username[i]+" said:";
-                newComment.querySelector("h5").style.fontSize="large";
-                newComment.querySelector("p").innerHTML = info.context[i];
-                newComment.querySelector("p").style.fontSize="medium";
-
-                let c=document.getElementById("comment");
-                c.appendChild(newComment);
+                if(!blacklist.blockUsers){
+                    load(info,i);          
+                }
+                }
             }
         }
 
     }
 
     const fetchData=async ()=>{
-        const data={
+        const data1={
             locId:id
+        }
+
+        const data2={
+            username:props.username
         }
 
         try{
@@ -69,17 +135,27 @@ function SingleLoc(props){
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(data1)
+            });
+
+            const response4=await fetch('http://localhost:3001/block/acquire',{
+                method:"POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data2)
             });
 
             const location=await response1.json();
             const event=await response2.json();
             const comment=await response3.json();
+            const blacklist=await response4.json();
                       
             setLocations(location);
             setEvents(event);
+            setComments(comment);
             
-            loadComment(comment);
+            loadComment(comment,blacklist);
         }catch(error){
             console.error('Error fetching data:', error.message);    
         }
@@ -207,19 +283,21 @@ function SingleLoc(props){
             context:areaVal
         }
 
-        try{           
-            const response=await fetch("http://localhost:3001/locations/comments",{
-                method:"POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
+        if(areaVal!=""){
+            try{           
+                const response=await fetch("http://localhost:3001/locations/comments",{
+                    method:"POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
 
-            console.log(response);
-        
-        }catch(err){
-            console.log(err);
+                console.log(response);
+            
+            }catch(err){
+                console.log(err);
+            }
         }
 
         let colors=["red","orange","yellow","blue","green","pink"];
@@ -231,16 +309,20 @@ function SingleLoc(props){
         newComment.querySelector("circle").setAttribute("fill", colors[index]);
 
         newComment.className = "d-flex";
-        newComment.querySelectorAll("div")[0].className = "flex-shrink-0"; 
-        newComment.querySelectorAll("div")[1].className = "flex-grow-1"; 
+        newComment.querySelectorAll("div")[0].className = "flex-shrink-0";
+        newComment.querySelectorAll("div")[1].className = "flex-grow-1";
 
-        newComment.querySelector("h5").innerHTML ="User "+props.username+" said:";
+        newComment.querySelector("h5").innerHTML =props.username;
         newComment.querySelector("h5").style.fontSize="large";
         newComment.querySelector("p").innerHTML = areaVal;
         newComment.querySelector("p").style.fontSize="medium";
 
+        if(areaVal==""){
+            window.alert("Empty comment!Please enter again.")
+        }else{
         let c=document.getElementById("comment");
         c.appendChild(newComment);
+        }
     }
 
     return(
