@@ -310,8 +310,8 @@ app.post('/login', async (req, res) => {
                 res.status(400).send('Incorrect password');
             const token = jwt.sign({id: existing._id, admin: existing.admin}, process.env.JWT_SECRET, { expiresIn: '2h'});
             //console.log(token);
-            clearData();
-            processData();
+            await clearData();
+            await processData();
             res.cookie('jwt', token, {
                 //httpOnly: true,
                 sameSite: 'lax',
@@ -388,6 +388,7 @@ app.get('/events/:eventID', async (req, res) => {
 app.get('/locations/show', async (req, res) => {
     try{
         const locationShown = await Location.find({ shown: { $eq: true} });
+        console.log(locationShown);
         res.status(200).json(locationShown);
     }catch(err){
         res.status(404).send(err);
