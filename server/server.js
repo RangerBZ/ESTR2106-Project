@@ -388,7 +388,7 @@ app.get('/events/:eventID', async (req, res) => {
 app.get('/locations/show', async (req, res) => {
     try{
         const locationShown = await Location.find({ shown: { $eq: true} });
-        console.log(locationShown);
+        //console.log(locationShown);
         res.status(200).json(locationShown);
     }catch(err){
         res.status(404).send(err);
