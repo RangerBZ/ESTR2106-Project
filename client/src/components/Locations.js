@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 // src/components/Locations.js
-=======
-// location.js
->>>>>>> 2fb5d5ba1dc36d2d5fb94e2d6afb871001e1ced3
 import React from 'react';
 import './../styles/Locations.css';
 import { Link } from 'react-router-dom';
@@ -13,7 +9,6 @@ class Locations extends React.Component {
     super(props);
     this.state = {
       username: '',
-<<<<<<< HEAD
       favourites: [],
       isLoading: true,
       error: null,
@@ -21,29 +16,16 @@ class Locations extends React.Component {
       showSuccess: false, // 显示成功消息
       showError: false,   // 显示错误消息
       message: '',        // 消息内容
-=======
-      favourites: [], 
-      isLoading: true,
-      error: null,
-      checked: false,
-      categories: ['All'],
->>>>>>> 2fb5d5ba1dc36d2d5fb94e2d6afb871001e1ced3
     };
   }
 
   componentDidMount() {
-<<<<<<< HEAD
     this.getCurrentUser();
     this.extractCategories();
   }
 
   extractCategories = () => {
     try {
-=======
-    try {
-      // Extract unique categories from location names
-      this.getCurrentUser();
->>>>>>> 2fb5d5ba1dc36d2d5fb94e2d6afb871001e1ced3
       const categoriesSet = new Set(['All']);
       this.props.allLocationsOriginal.forEach(location => {
         const categoryMatch = location.name.match(/\(([^)]+)\)$/);
@@ -52,10 +34,6 @@ class Locations extends React.Component {
         }
       });
       const categories = Array.from(categoriesSet);
-<<<<<<< HEAD
-=======
-
->>>>>>> 2fb5d5ba1dc36d2d5fb94e2d6afb871001e1ced3
       this.setState({
         categories,
         isLoading: false,
@@ -64,12 +42,8 @@ class Locations extends React.Component {
       console.error('Error processing categories:', error);
       this.setState({ error: error.message, isLoading: false });
     }
-<<<<<<< HEAD
   };
 
-=======
-  }
->>>>>>> 2fb5d5ba1dc36d2d5fb94e2d6afb871001e1ced3
   getCurrentUser = async () => {
     try {
       const response = await fetch('http://localhost:3001/currentUser', {
@@ -77,10 +51,6 @@ class Locations extends React.Component {
         credentials: 'include',
       });
       const data = await response.json();
-<<<<<<< HEAD
-=======
-
->>>>>>> 2fb5d5ba1dc36d2d5fb94e2d6afb871001e1ced3
       this.setState({ username: data.username }, () => {
         this.fetchFavourites();
       });
@@ -92,24 +62,13 @@ class Locations extends React.Component {
 
   fetchFavourites = async () => {
     const { username } = this.state;
-<<<<<<< HEAD
-=======
-
->>>>>>> 2fb5d5ba1dc36d2d5fb94e2d6afb871001e1ced3
     try {
       const response = await fetch(`http://localhost:3001/favourites/${username}`, {
         method: 'GET',
         credentials: 'include',
       });
-<<<<<<< HEAD
       const data = await response.json();
       const favouriteLocIds = data.favourites.map(loc => loc.locId);
-=======
-
-      const data = await response.json();
-      const favouriteLocIds = data.favourites.map(loc => loc.locId);
-
->>>>>>> 2fb5d5ba1dc36d2d5fb94e2d6afb871001e1ced3
       this.setState({
         favourites: favouriteLocIds,
         isLoading: false,
@@ -140,10 +99,6 @@ class Locations extends React.Component {
 
   handleFavourite = async locId => {
     const { username } = this.state;
-<<<<<<< HEAD
-=======
-
->>>>>>> 2fb5d5ba1dc36d2d5fb94e2d6afb871001e1ced3
     try {
       const response = await fetch('http://localhost:3001/favourites', {
         method: 'POST',
@@ -158,16 +113,11 @@ class Locations extends React.Component {
       if (response.ok) {
         const data = await response.json();
         console.log(data.message);
-<<<<<<< HEAD
-=======
-
->>>>>>> 2fb5d5ba1dc36d2d5fb94e2d6afb871001e1ced3
         // 更新状态
         this.setState(prevState => ({
           favourites: prevState.favourites.includes(locId)
             ? prevState.favourites.filter(id => id !== locId)
             : [...prevState.favourites, locId],
-<<<<<<< HEAD
           showSuccess: true,
           message: prevState.favourites.includes(locId) ? 'Removed from favourites!' : 'Added to favourites!',
         }));
@@ -184,15 +134,6 @@ class Locations extends React.Component {
         showError: true,
         message: 'Error updating favourites.',
       });
-=======
-        }));
-      } else {
-        const errorData = await response.json();
-        console.error('Favourites action failed', errorData.message);
-      }
-    } catch (error) {
-      console.error('Error updating favourites:', error);
->>>>>>> 2fb5d5ba1dc36d2d5fb94e2d6afb871001e1ced3
     }
   };
 
@@ -218,15 +159,9 @@ class Locations extends React.Component {
   }
 
   render() {
-<<<<<<< HEAD
     const { isLoading, error, categories, favourites, showSuccess, showError, message } = this.state;
     const { filters, allLocations, allEvents } = this.props;
 
-=======
-    const { isLoading, error, categories, favourites } = this.state;
-    const { filters, allLocations, allEvents } = this.props;
-    
->>>>>>> 2fb5d5ba1dc36d2d5fb94e2d6afb871001e1ced3
     if (isLoading) {
       return <div className='Favourites'><p>Loading...</p></div>;
     }
@@ -236,7 +171,6 @@ class Locations extends React.Component {
     }
 
     return (
-<<<<<<< HEAD
       <Container fluid className='locations-container py-4'>
         {/* User Feedback Messages */}
         {showSuccess && (
@@ -310,59 +244,11 @@ class Locations extends React.Component {
               <Form.Label className='filter-label'><i className="bi bi-search"></i> Search for Locations</Form.Label>
               <Form.Control
                 type="text"
-=======
-      <div className='locations-container'>
-        {/* Left Section: Location List Title */}
-        <div className='left-section'>
-          <h2 className="location-title">Location List</h2>
-        </div>
-
-        {/* Right Section: Filters */}
-        <div className='right-section'>
-          {/* Filter by Distance */}
-          <div className='filter-item distance-filter'>
-            <label htmlFor="distance-slider" className='filter-label'>Filter by Distance</label>
-            <input
-              type="range"
-              id="distance-slider"
-              min="1"
-              max="25"
-              value={filters.distance}
-              onChange={this.handleDistanceChange}
-              className='distance-slider'
-            />
-            <span className='distance-value'>{filters.distance} km</span>
-          </div>
-
-          {/* Filter by Category */}
-          <div className='filter-item category-filter'>
-            <label htmlFor="category-filter" className='filter-label'><i class="bi bi-funnel"></i>Filter by Category</label>
-            <select
-              id="category-filter"
-              value={filters.selectedCategory}
-              onChange={this.handleCategoryChange}
-              className='category-select'
-            >
-              {categories.map((category, index) => (
-                  <option key={index} value={category}>{category}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Search Section */}
-          <div className='filter-item search-filter'>
-            <label htmlFor="search" className='filter-label'><i class="bi bi-search"></i>Search for Locations</label>
-            <div className='search-container'>
-              <input
-                type="text"
-                id="search"
->>>>>>> 2fb5d5ba1dc36d2d5fb94e2d6afb871001e1ced3
                 placeholder="Search..."
                 value={filters.searchText}
                 onChange={this.handleSearchChange}
                 className='search-input'
               />
-<<<<<<< HEAD
             </Form.Group>
           </Col>
         </Row>
@@ -424,67 +310,6 @@ class Locations extends React.Component {
           </Col>
         </Row>
       </Container>
-=======
-            </div>
-          </div>
-        </div>
-
-        {/* Table Section */}
-        <div className='table-container'>
-          <table className='locations-table'>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Location</th>
-                <th>
-                  Num of Events  
-                  <div className='sort-icons'>
-                    
-                    <i
-                      className="bi bi-sort-numeric-down-alt"
-                      onClick={this.sortDescending}
-                      title="Sort Ascending"
-                      aria-label="Sort by ascending number of events"
-                    ></i>
-                    <i
-                      className="bi bi-sort-numeric-down"
-                      onClick={this.sortAscending}
-                      title="Sort Descending"
-                      aria-label="Sort by descending number of events"
-                    ></i>
-                  </div>
-                </th>
-                <th>Add to Favourites</th>
-              </tr>
-            </thead>
-            <tbody>
-              {allLocations.length > 0 ? (
-                allLocations.map(location => (
-                  <tr key={location.locId}>
-                    <td>{location.locId}</td>
-                    <td>
-                      <Link to={`/locations/${location.locId}`}>{location.name}</Link>
-                    </td>
-                    <td>{this.getNum(allEvents, location.locId)}</td>
-                    <td>
-                      <input
-                        type="checkbox"
-                        onChange={() => this.handleFavourite(location.locId)}
-                        checked={favourites.includes(location.locId)}
-                      />
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="4" style={{ textAlign: 'center' }}>No locations match your criteria!</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
->>>>>>> 2fb5d5ba1dc36d2d5fb94e2d6afb871001e1ced3
     );
   }
 }
