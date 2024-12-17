@@ -2,7 +2,7 @@ import React from 'react';
 import { AuthContext } from '../services/AuthContext';
 //import { useNavigate } from 'react-router-dom';
 import { login, getAdmin } from '../services/login';
-import './../styles/login.css';
+import './../styles/Login.css';
 
 class Login extends React.Component {
     static contextType = AuthContext;
