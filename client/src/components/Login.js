@@ -2,6 +2,7 @@ import React from 'react';
 import { AuthContext } from '../services/AuthContext';
 //import { useNavigate } from 'react-router-dom';
 import { login, getAdmin } from '../services/login';
+import './../styles/Login.css';
 
 class Login extends React.Component {
     static contextType = AuthContext;
@@ -44,32 +45,37 @@ class Login extends React.Component {
 
     render(){
     return (
-      <div>
-        <br /><br /><br />
-        <h2 style={{textAlign:"center"}}>Login Page</h2>
-        <div className='container'>
-          <form onSubmit={async (e) => { e.preventDefault();await this.handleLogin(); }} style={{marginLeft:'40vw'}}>
-          <label htmlFor="name">Username</label><br />
-          <input 
-            type='text' 
-            id="name" 
-            name="name" 
-            required
-          /><br /><br/>
-
-          <label htmlFor="password">Password</label><br />
-          <input 
-            type='password' // Changed from 'text' to 'password'
-            id="password" 
-            name="password" 
-            required
-          /><br /><br/>
-
-          <button id="sub" type="submit">Log In</button>
-          <button type='button' onClick={async() => { await this.handleRegister();}}>Register</button>
-          </form>
-        </div>
-    </div>
+      <div className="login-container">
+  <div className="login-form">
+    <h2 className="text-center mb-4">Login Page</h2>
+    <form onSubmit={async (e) => { e.preventDefault(); await this.handleLogin(); }}>
+      <div className="mb-3">
+        <label htmlFor="name" className="form-label">Username</label>
+        <input 
+          type='text' 
+          id="name" 
+          name="name" 
+          className="form-control" 
+          required
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="password" className="form-label">Password</label>
+        <input 
+          type='password' // Changed from 'text' to 'password'
+          id="password" 
+          name="password" 
+          className="form-control" 
+          required
+        />
+      </div>
+      <div className="d-grid gap-2">
+        <button className="btn btn-primary" type="submit">Log In</button>
+        <button className="btn btn-secondary" type='button' onClick={async() => { await this.handleRegister();}}>Register</button>
+      </div>
+    </form>
+  </div>
+</div>
     );
 }
 }

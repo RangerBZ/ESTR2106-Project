@@ -1,4 +1,5 @@
 import React from 'react';
+import './../styles/Manage.css';
 
 class Manage extends React.Component {
     constructor(props) {
@@ -15,7 +16,7 @@ class Manage extends React.Component {
     render() {
         const routerStyle = {
             listStyle: 'none',
-            padding: 0,
+            padding: '1vh',
             margin: 0,
             display: 'flex',
             justifyContent: 'flex-start',
@@ -113,33 +114,107 @@ class NewEvent extends React.Component {
 
     render() {
         return (
-            <div>
-                <form onSubmit={async (event) => {await this.handleSubmit(event)}} id='newEvent'>
-                    <label htmlFor='new_eventID'>Event ID:</label>
-                    <input type="number" id="new_eventID" name="new_eventID" value={this.state.eventID} onChange={(event) => { this.setState({eventID: event.target.value})}} required/>
-                    <label htmlFor='new_eventName'>Event title:</label>
-                    <input type='text' id="new_eventName" name="new_eventName" value={this.state.eventName} onChange={(event) => {this.setState({eventName: event.target.value})}} required/>
-                    <br></br>
-                    <label htmlFor='new_locID'>Location ID(should be based on ID on location list):</label>
-                    <input type="number" id='new_locID' name='new_locID' value={this.state.locId} onChange={(event) => {this.setState({locId: event.target.value})}} required/>
-                    <br></br>
-                    <label htmlFor='new_eventDate'>Date/time:</label>
-                    <input type='text' id='new_eventDate' name='new_eventDate'value={this.state.eventDate} onChange={(event) => {this.setState({eventDate: event.target.value})}} required/>
-                    <br></br>
-                    <label htmlFor='new_description'>Description:</label>
-                    <textarea id='new_description' name='new_description' value={this.state.eventDescription} onChange={(event) => {this.setState({eventDescription: event.target.value})}} required/>
-                    <br></br>
-                    <label htmlFor='new_presenter'>Presenter:</label>
-                    <input type='text' id='new_presenter' name='new_presenter'value={this.state.presenter} onChange={(event) => {this.setState({presenter: event.target.value})}} required/>
-                    <br></br>
-                    <label htmlFor='new_price'>Price:</label>
-                    <input type='number' id='new_price' name='new_price' value={this.state.eventPrice} onChange={(event) => {this.setState({eventPrice: event.target.value})}} required/>
-                    <br></br>
-                    <p id="info"></p>
-                    <br></br>
-                    <button type='submit'>Add new</button>
-                </form>
-            </div>
+            <div className="d-flex justify-content-center align-items-center vh-100">
+  <div className="col-md-6 col-lg-4">
+    <div className="p-4 bg-light rounded shadow">
+      <form onSubmit={async (event) => { await this.handleSubmit(event); }} id='newEvent'>
+        <div className="mb-3">
+          <label htmlFor='new_eventID' className="form-label">Event ID:</label>
+          <input 
+            type="number" 
+            id="new_eventID" 
+            name="new_eventID" 
+            value={this.state.eventID} 
+            onChange={(event) => this.setState({ eventID: event.target.value })} 
+            required 
+            className="form-control"
+          />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor='new_eventName' className="form-label">Event title:</label>
+          <input 
+            type='text' 
+            id="new_eventName" 
+            name="new_eventName" 
+            value={this.state.eventName} 
+            onChange={(event) => this.setState({ eventName: event.target.value })} 
+            required 
+            className="form-control"
+          />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor='new_locID' className="form-label">Location ID (should be based on ID on location list):</label>
+          <input 
+            type="number" 
+            id='new_locID' 
+            name='new_locID' 
+            value={this.state.locId} 
+            onChange={(event) => this.setState({ locId: event.target.value })} 
+            required 
+            className="form-control"
+          />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor='new_eventDate' className="form-label">Date/time:</label>
+          <input 
+            type='datetime-local' // Changed from 'text' to 'datetime-local'
+            id='new_eventDate' 
+            name='new_eventDate'
+            value={this.state.eventDate} 
+            onChange={(event) => this.setState({ eventDate: event.target.value })} 
+            required 
+            className="form-control"
+          />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor='new_description' className="form-label">Description:</label>
+          <textarea 
+            id='new_description' 
+            name='new_description' 
+            value={this.state.eventDescription} 
+            onChange={(event) => this.setState({ eventDescription: event.target.value })} 
+            required 
+            className="form-control"
+          ></textarea>
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor='new_presenter' className="form-label">Presenter:</label>
+          <input 
+            type='text' 
+            id='new_presenter' 
+            name='new_presenter'
+            value={this.state.presenter} 
+            onChange={(event) => this.setState({ presenter: event.target.value })} 
+            required 
+            className="form-control"
+          />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor='new_price' className="form-label">Price:</label>
+          <input 
+            type='number' 
+            id='new_price' 
+            name='new_price' 
+            value={this.state.eventPrice} 
+            onChange={(event) => this.setState({ eventPrice: event.target.value })} 
+            required 
+            className="form-control"
+          />
+        </div>
+
+        <p id="info"></p>
+
+        <button type='submit' className="btn btn-primary w-100">Add new</button>
+      </form>
+    </div>
+  </div>
+</div>
         );
     }
 }
@@ -232,35 +307,47 @@ class ModifyEvent extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="d-flex justify-content-center align-items-center vh-100">
+            <div className="col-md-6 col-lg-4">
+            <div className="p-4 bg-light rounded shadow">
                 <form onSubmit={async (event) => {await this.handleSubmit(event)}} id='modifyEvent'>
-                    <label htmlFor='eventID'>Event ID:</label>
-                    <input type="number" id="eventID" name="eventID" required/>
+                    <div className='mb-3 d-flex align-items-center'>
+                    <label htmlFor='eventID' className="form-label me-2">Event ID:</label>
+                    <input type="number" id="eventID" name="eventID" className="form-control" required/>
                     <button type="button" onClick={async () => await this.loadEvent()} style={{display: 'inline'}}>Load event</button>
-                    <br></br>
-                    <label htmlFor='eventName'>Event title:</label>
-                    <input type='text' id="eventName" name="eventName" value={this.state.eventName} onChange={(event) => {this.setState({eventName: event.target.value})}} required/>
-                    <br></br>
-                    <label htmlFor='locID'>Location ID(should be based on ID on location list):</label>
-                    <input type="number" id='locID' name='locID' value={this.state.locId} onChange={(event) => {this.setState({ locId: event.target.value })}} required/>
-                    <br></br>
-                    <label htmlFor='eventDate'>Date/time:</label>
-                    <input type='text' id='eventDate' name='eventDate' value={this.state.eventDate} onChange={(event) => { this.setState({ eventDate: event.target.value }) }} required/>
-                    <br></br>
-                    <label htmlFor='description'>Description:</label>
-                    <textarea id='description' name='description' value={this.state.eventDescription} onChange={(event) => { this.setState({ eventDescription: event.target.value}) }} required/>
-                    <br></br>
-                    <label htmlFor='presenter'>Presenter:</label>
-                    <input type='text' id='presenter' name='presenter' value={this.state.presenter} onChange={(event) => { this.setState({ presenter: event.target.value} ) }} required/>
-                    <br></br>
-                    <label htmlFor='price'>Price:</label>
-                    <input type='number' id='price' name='price' value={this.state.eventPrice} onChange={(event) => { this.setState({ eventPrice: event.target.value }) }} required/>
-                    <br></br>
+                    </div>
+                    <div className="mb-3">
+                    <label htmlFor='eventName' className="form-label">Event title:</label>
+                    <input type='text' id="eventName" name="eventName" className="form-control" value={this.state.eventName} onChange={(event) => {this.setState({eventName: event.target.value})}} required/>
+                    </div>
+                    <div className="mb-3">
+                    <label htmlFor='locID' className="form-label">Location ID(should be based on ID on location list):</label>
+                    <input type="number" id='locID' name='locID' className="form-control" value={this.state.locId} onChange={(event) => {this.setState({ locId: event.target.value })}} required/>
+                    </div>
+                    <div className="mb-3">
+                    <label htmlFor='eventDate' className="form-label">Date/time:</label>
+                    <input type='text' id='eventDate' name='eventDate' className="form-control" value={this.state.eventDate} onChange={(event) => { this.setState({ eventDate: event.target.value }) }} required/>
+                    </div>
+                    <div className="mb-3">
+                    <label htmlFor='description' className="form-label">Description:</label>
+                    <textarea id='description' name='description' className="form-control" value={this.state.eventDescription} onChange={(event) => { this.setState({ eventDescription: event.target.value}) }} required/>
+                    </div>
+                    <div className="mb-3">
+                    <label htmlFor='presenter' className="form-label">Presenter:</label>
+                    <input type='text' id='presenter' name='presenter' className="form-control" value={this.state.presenter} onChange={(event) => { this.setState({ presenter: event.target.value} ) }} required/>
+                    </div>
+                    <div className="mb-3">
+                    <label htmlFor='price' className="form-label">Price:</label>
+                    <input type='number' id='price' name='price' className="form-control" value={this.state.eventPrice} onChange={(event) => { this.setState({ eventPrice: event.target.value }) }} required/>
                     <p id="info"></p>
-                    <br></br>
-                    <button type='submit'>Submit</button>
+                    </div>
+                    <div className="d-grid gap-2">
+                    <button type='submit' className="btn btn-primary">Submit</button>
                     <button type='button' onClick={() => this.deleteEvent()}>Delete</button>
+                    </div>
                 </form>
+                </div>
+            </div>
             </div>
         );
     }
@@ -299,28 +386,66 @@ class CreateUser extends React.Component {
 
     render() {
         return (
-            <div>
-                <form onSubmit={async(event) => { await this.handleSubmit(event);}}>
-                    <label htmlFor='new_username'>New Username</label>
-                    <input type='text' id='new_username' name='new_username' required/>
-                    <br></br>
-                    <label htmlFor='new_password'>New password</label>
-                    <input type='password' id='new_password' name='new_password' required/>
-                    <br></br>
-                    <fieldset>
-                    <legend>Please choose if it is admin:</legend>
-                    <label>
-                    <input type="radio" name="choice" value="Yes" required/> Yes
-                    </label>
-                    <br></br>
-                    <label>
-                    <input type="radio" name="choice" value="No"/> No
-                    </label>
-                    <br></br>
-                    </fieldset>
-                    <button type='submit'>submit</button>
-                </form>
-            </div>
+                <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="col-md-6 col-lg-4">
+          <div className="p-4 bg-light rounded shadow">
+            <form onSubmit={async(event) => { await this.handleSubmit(event);}}>
+              <div className="mb-3">
+                <label htmlFor='new_username' className="form-label">New Username</label>
+                <input 
+                  type='text' 
+                  id='new_username' 
+                  name='new_username' 
+                  required 
+                  className="form-control"
+                  onChange={this.handleChange}
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor='new_password' className="form-label">New Password</label>
+                <input 
+                  type='password' 
+                  id='new_password' 
+                  name='new_password' 
+                  required 
+                  className="form-control"
+                  onChange={this.handleChange}
+                />
+              </div>
+
+              <fieldset className="mb-3 border p-3">
+                <legend className="fw-bold">Please choose if it is admin:</legend>
+                <div className="form-check">
+                  <input 
+                    type="radio" 
+                    id="choiceYes" 
+                    name="choice" 
+                    value="Yes" 
+                    required 
+                    className="form-check-input"
+                    onChange={this.handleChange}
+                  />
+                  <label htmlFor="choiceYes" className="form-check-label">Yes</label>
+                </div>
+                <div className="form-check">
+                  <input 
+                    type="radio" 
+                    id="choiceNo" 
+                    name="choice" 
+                    value="No" 
+                    className="form-check-input"
+                    onChange={this.handleChange}
+                  />
+                  <label htmlFor="choiceNo" className="form-check-label">No</label>
+                </div>
+              </fieldset>
+
+              <button type='submit' className="btn btn-primary w-100">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
         );
     }
 }
@@ -372,18 +497,42 @@ class ModifyUser extends React.Component {
 
     render() {
         return (
-            <div>
-                <form id='modUser' onSubmit={async (event) => { await this.handleSubmit(event);}}>
-                    <label htmlFor='username'>targeted Username</label>
-                    <input type='text' id='username' name='username' required/>
-                    <br></br>
-                    <label htmlFor='password'>New password</label>
-                    <input type='password' id='password' name='password' required/>
-                    <br></br>
-                    <button type='button' onClick={ async() => { await this.deleteUser();}}>Delete</button>
-                    <button type='submit'>Change password</button>
-                </form>
-            </div>
+            <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="col-md-6 col-lg-4">
+          <div className="p-4 bg-light rounded shadow">
+            <form id='modUser' onSubmit={async (event) => { await this.handleSubmit(event);}}>
+              <div className="mb-3">
+                <label htmlFor='username' className="form-label">Targeted Username</label>
+                <input 
+                  type='text' 
+                  id='username' 
+                  name='username' 
+                  required 
+                  className="form-control"
+                  onChange={this.handleChange}
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor='password' className="form-label">New Password</label>
+                <input 
+                  type='password' 
+                  id='password' 
+                  name='password' 
+                  required 
+                  className="form-control"
+                  onChange={this.handleChange}
+                />
+              </div>
+
+              <div className="d-grid gap-2">
+                <button type='button' onClick={ async() => { await this.deleteUser();}} className="btn btn-danger">Delete</button>
+                <button type='submit' className="btn btn-primary">Change Password</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
         );
     }
 }

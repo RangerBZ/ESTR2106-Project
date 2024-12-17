@@ -1,0 +1,13 @@
+ul li :hover {
+    animation-name: float-bar;
+    animation-duration: 1s;
+  }
+  
+  @keyframes float-bar {
+    to {
+      font-size: larger;
+      transform: translate(3px, 3px);
+      box-shadow: 3px 3px 28px grey;
+      border-radius: 7px;
+    }
+  }
