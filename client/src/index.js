@@ -247,11 +247,14 @@ class App extends React.Component {
             </Link>
           </li>
           <li className="nav-item">
-            <Link to="/others" className="nav-link">No idea?</Link>
+            <Link to="/booking" className="nav-link"><i className="bi bi-calendar2-event"></i> My event</Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/others" className="nav-link"><i className="bi bi-lightbulb"></i> No idea?</Link>
           </li>
           {userRole && (
             <li className="nav-item">
-              <Link to="/admin" className="nav-link">Manage database</Link>
+              <Link to="/admin" className="nav-link"><i className="bi bi-database"></i> Manage database</Link>
             </li>
           )}
           <li className="nav-item"
