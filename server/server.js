@@ -1,4 +1,3 @@
-//servers-side processing for fetching the data
 const express = require('express');
 const cors  = require('cors');
 const xml2js = require('xml2js');
@@ -42,8 +41,8 @@ async function fetchAndParse(url){
     }
 }
 
-const qualifySet = [];
-const locSet = {};
+let qualifySet = [];
+let locSet = {};
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Connection error:'));
@@ -119,6 +118,79 @@ db.once('open', () => {
         }
     });
 
+    const CommentSchema= mongoose.Schema({
+        locId: {
+            type: Number,
+            required: true,
+        },
+        name:{
+            type:Array,
+            required: true
+        },
+        context: {
+            type:Array,
+            required: true
+        }
+    })
+
+    const BlacklistSchema=mongoose.Schema({
+        username:{
+            type: String,
+            requried: true,
+            unique: true
+        },
+        blockUsers:{
+            type:Array,
+            required:true
+        }
+    })
+
+    const BookingSchema = mongoose.Schema({
+        username: {
+          type: String,
+          required: true,
+        },
+        eventId: {
+          type: Number,
+          required: true,
+        },
+        title: {
+          type: String,
+          required: true,
+        },
+      });
+
+      const LikeSchema = mongoose.Schema({
+        username: {
+          type: String,
+          required: true,
+        },
+        eventId: {
+          type: Number,
+          required: true,
+        },
+        title: {
+          type: String,
+          required: true,
+        },
+      });
+      LikeSchema.index({ username: 1, eventId: 1 }, { unique: true });
+
+      const FavouriteSchema = mongoose.Schema({
+        username: {
+          type: String,
+          required: true,
+        },
+        locId: {
+          type: Number,
+          required: true,
+        },
+      });
+      
+      FavouriteSchema.index({ username: 1, locId: 1 }, { unique: true });
+
+
+
     UserSchema.pre('save', async function (next) {
         if (!this.isModified('password')) return next();
     
@@ -138,6 +210,11 @@ db.once('open', () => {
     const Event = mongoose.model('Event', EventSchema);
     const Location = mongoose.model('Location', LocationSchema);
     const User = mongoose.model('User', UserSchema);
+    const Comment=mongoose.model('Comment',CommentSchema);
+    const Blacklist=mongoose.model('Blacklist',BlacklistSchema);
+    const Booking = mongoose.model('Booking', BookingSchema);
+    const Like = mongoose.model('Like', LikeSchema);
+    const Favourite = mongoose.model('Favourite', FavouriteSchema);
 
 async function userSetup(){
     try{
@@ -158,9 +235,13 @@ async function userSetup(){
 }
 
 async function clearData(){
-        await Event.deleteMany({});
-        await Location.deleteMany({});
-    }
+    await Event.deleteMany({});
+    await Location.deleteMany({});
+}
+
+async function clearComment(){
+    await Comment.deleteMany({});
+}
 
 // in total 1024 events, so not all of it?
 async function processData(){
@@ -171,6 +252,7 @@ async function processData(){
         //console.log(eventData);
         partial_events = eventData.events.event.slice(0, 550);
         const eventsPromises = [];
+        locSet={};
 
     for (const element of partial_events) {
 
@@ -229,8 +311,14 @@ async function processData(){
         if(display){
             for(item of qualifySet){
                 //console.log(Math.abs(vId-item.locId));
-                if(Math.abs(vId-item.locId) < 10000)
+                if(Math.abs(vId-item.locId) < 10000&& vId!=item.locId){
                     display = false;
+                    break;
+                }
+                if(vId==item.locId){
+                    display=true;
+                    break;
+                }
             }
             qualifySet.push({
                 locId: vId,
@@ -260,27 +348,32 @@ async function processData(){
     }
 }
 
-clearData();
-processData();
+//clearData();
+//processData();
 userSetup();
+//commentSetup();
 
 // if login as new user, then is the same as the register
 app.post('/login', async (req, res) => {
     try{
         const { username, password } = req.body;
+        //console.log(username);
         const existing = await User.findOne({username: {$eq: username}});
         if(!existing){
             res.status(400).send('Invalid user');
         }else{
             if(!existing.matchPassword(password))
                 res.status(400).send('Incorrect password');
-            const token = jwt.sign({id: existing._id, admin: existing.admin}, process.env.JWT_SECRET, { expiresIn: '2h'});
-            clearData();
-            processData();
+            const token = jwt.sign({id: existing._id, admin: existing.admin,username: existing.username}, process.env.JWT_SECRET, { expiresIn: '2h'});
+            //console.log(token);
+            await clearData();
+            await processData();
             res.cookie('jwt', token, {
-                httpOnly: true,
-                sameSite: 'strict',
-                maxAge: 7200000
+                //httpOnly: true,
+                sameSite: 'lax',
+                secure: process.env.NODE_ENV === 'production',
+                maxAge: 7200000,
+                path: '/'
             });
             res.status(202).json({message: 'Login successful', user: { username: existing.username, admin: existing.admin}});
         }
@@ -293,12 +386,12 @@ app.post('/register', async (req, res) => {
     try{
     const { username, password } = req.body;
     const existing = await User.findOne({username: {$eq: username}});
-    if(!existing)
+    if(existing)
         res.status(400).send('Duplicate username');
     else{
-        const newUser = new User({ username: username, password: password, admin: false});
+        const newUser = new User({ username: String(username), password: String(password), admin: false});
         await newUser.save();
-        res.status(201).send('User resgistered successfully');
+        res.status(201).send('User registered successfully');
     }}catch(error){
         res.status(500).send(error);
     }
@@ -311,14 +404,18 @@ app.post('/logout', (req, res) => {
 });
 
 const authenticateToken = (req, res, next) => {
+    try{
     const token = req.cookies.jwt;
-
+    //console.log(token);
     if (!token) return res.sendStatus(401);
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        //console.log(err);
         if (err) return res.sendStatus(403);
         next();
-    });
+    });}catch(error){
+        console.log(error);
+    }
 };
 
 // Apply middleware to protected routes
@@ -347,6 +444,7 @@ app.get('/events/:eventID', async (req, res) => {
 app.get('/locations/show', async (req, res) => {
     try{
         const locationShown = await Location.find({ shown: { $eq: true} });
+        console.log(locationShown);
         res.status(200).json(locationShown);
     }catch(err){
         res.status(404).send(err);
@@ -368,8 +466,8 @@ app.get('/locations/:locationID', async(req, res) => {
 app.post('/admin/newEvent', authenticateToken, async(req, res) => {
     try{
     const eventID = Number(req.body.eventID);
-    const title = req.body.eventTitle;
-    const locID = Number(req.body.locationID);
+    const title = req.body.title;
+    const locID = Number(req.body.locID);
     const date = req.body.date;
     const description = req.body.description;
     const presenter = req.body.presenter;
@@ -398,20 +496,23 @@ app.post('/admin/newEvent', authenticateToken, async(req, res) => {
 app.post('/admin/modifyEvent', authenticateToken, async(req, res)=>{
     try{
         const eventID = Number(req.body.eventID);
-    const title = req.body.eventTitle;
-    const locID = Number(req.body.locationID);
+    const title = req.body.title;
+    const locID = Number(req.body.locID);
     const date = req.body.date;
     const description = req.body.description;
     const presenter = req.body.presenter;
     const price = Number(req.body.price);
+    //console.log(req.body);
+    //const price2 = 2;
     const result = await Event.findOneAndUpdate(
         {eventId:{$eq: eventID}},
-        {title: title},
-        {locId: locID},
-        {date: date},
-        {description: description},
-        {presenter: presenter},
-        {price: price}
+        {title: title,
+        locId: locID,
+        date: date,
+        description: description,
+        presenter: presenter,
+        price: price},
+        {new: true}
     );
     if(!result)
         res.status(404).send('Event not found!');
@@ -424,11 +525,12 @@ app.post('/admin/modifyEvent', authenticateToken, async(req, res)=>{
 app.delete('/admin/events/:eventID', authenticateToken, async(req, res) => {
     try{
         const eventID = Number(req.params.eventID);
+        //console.log(eventID);
         // there could be cases when title is the same, and it is not convenient for String to compare
         const result = await Event.findOneAndDelete({ eventId: {$eq: eventID}});
         if(!result)
             res.status(404).send('Event not found!');
-        res.status(200).send('Event deleted');
+        else res.status(200).send('Event deleted');
     }catch(err){
         console.log(err);
     }
@@ -436,37 +538,38 @@ app.delete('/admin/events/:eventID', authenticateToken, async(req, res) => {
 
 app.post('/admin/modifyUser', authenticateToken, async(req, res) => {
     try{
-        const username = req.body.name;
-        const password = req.body.password;
+        const username = String(req.body.username);
+        const password = String(req.body.password);
+        //console.log(username);
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         const result = await User.findOneAndUpdate(
-            {username: username},
+            {username: {$eq: username}},
             {password: hashedPassword}
         ); // should auto-finding any matching value...
         if(!result)
             res.status(404).send('User not found!');
-        res.status(200).send('User modified successfully');
+        else res.status(200).send('User modified successfully');
     }catch(err){
         console.log(err);
     }
 });
 
-app.post('admin/loadUser', authenticateToken, async (req, res) =>{
+app.post('/admin/loadUser', authenticateToken, async (req, res) =>{
     try{
         const username = req.body.name;
         const result = await User.findOne({ username: { $eq: username} });
         if(!result) res.status(404).send('User not found!');
-        res.status(200).json(result);
+        else res.status(200).json(result);
     }catch(err){
         console.log(err);
     }
 });// could only send the hashed version of the data
 
-app.post('admin/createUser',authenticateToken, async(req, res) => {
+app.post('/admin/createUser',authenticateToken, async(req, res) => {
     try{
-        const username = req.body.name;
-        const password = req.body.password;
+        const username = String(req.body.username);
+        const password = String(req.body.password);
         const admin = req.body.admin;
         await User.create({
             username: username,
@@ -475,22 +578,308 @@ app.post('admin/createUser',authenticateToken, async(req, res) => {
         });
         res.status(200).send('User created');
     }catch(error){
-        res.status(500).send(error);
+        res.status(500).send('Duplicate or invalid username input!');
     }
 });
 
-app.delete('admin/users/:username',authenticateToken, async(req, res)=>{
+app.delete('/admin/users/:username',authenticateToken, async(req, res)=>{
     try{
-        const username = req.params.username;
+        const username = String(req.params.username);
+        //console.log(username);
         const result = User.findOneAndDelete({username: {$eq: username}});
         if(!result)
             res.status(404).send('User not found!');
-        res.status(200).send('User deleted successfully');
+        else res.status(200).send('User deleted successfully');
     }catch(error){
         console.log(err);
     }
 });
 
+//saving users' comments
+app.post('/locations/comments',async(req,res)=>{
+    try{
+        let id=req.body.locId;
+        let username=req.body.username;
+        let context=req.body.context;
+
+        let test=await Comment.findOne({locId:{$eq:id}});
+        if(!test){
+            let arr1=[];
+            arr1.push(username);
+            let arr2=[];
+            arr2.push(context);
+
+            Comment.create({
+                locId:id,
+                name:arr1,
+                context:arr2
+            })
+        }else{
+            let info=await Comment.findOne({locId:{$eq:id}});
+            let arr1=info.name;
+            arr1.push(username);
+
+            let arr2=info.context;
+            arr2.push(context);
+            let result=await Comment.findOneAndUpdate({locId:{$eq:id}},{name:arr1,context:arr2})
+
+            console.log(result);
+
+        }
+
+        res.status(200).send("ok!");
+        
+    }catch(error){
+        console.log(error);
+    }
+})
+
+//acquiring users' comments
+app.post('/locations/acquire',async(req,res)=>{
+    try{
+        let id=req.body.locId;       
+        let info=await Comment.findOne({locId:{$eq:id}});
+        
+        if(info!=null){
+            let comments={
+                username:info.name,
+                context:info.context
+            }
+
+            res.status(200).send(comments);
+        }else{           
+            res.status(200).send({});
+        }
+
+    }catch(error){
+        console.log(error);
+    }
+})
+
+//block comments
+app.post('/block/save',async(req,res)=>{
+    try{
+        let username=req.body.username;
+        let blockUser=req.body.blockUser;
+
+        let test=await Blacklist.findOne({username:{$eq:username}});
+        if(!test){
+            let arr=[];
+            arr.push(blockUser);
+
+            Blacklist.create({
+                username:username,
+                blockUsers:arr
+            })
+        }else{
+            let info=await Blacklist.findOne({username:{$eq:username}});
+            let arr=info.blockUsers;
+            arr.push(blockUser);
+
+            let result=await Blacklist.findOneAndUpdate({username:{$eq:username}},{blockUsers:arr})
+
+            console.log(result);
+
+        }
+        
+        res.send("ok");
+
+    }catch(error){
+        console.log(error);
+    }
+})
+
+//acquiring users' blacklists
+app.post('/block/acquire',async(req,res)=>{
+    try{
+        let username=req.body.username;       
+        let info=await Blacklist.findOne({username:{$eq:username}});
+        
+        if(info!=null){
+            let blacklist={
+                blockUsers:info.blockUsers
+            }
+
+            res.status(200).send(blacklist);
+        }else{           
+            res.status(200).send({});
+        }
+
+    }catch(error){
+        console.log(error);
+    }
+})
+
+app.post('/bookings', async (req, res) => {
+    try {
+      const { username, eventId, title } = req.body;
+
+      // Check if the booking already exists
+      const existingBooking = await Booking.findOne({
+        username: username,
+        eventId: eventId,
+      });
+
+      if (existingBooking) {
+        return res.status(400).json({ message: 'Event already booked' });
+      }
+
+      const newBooking = new Booking({ username, eventId, title });
+      await newBooking.save();
+      res.status(201).json({ message: 'Booking successful' });
+    } catch (error) {
+      console.error('Error handling booking:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+  // GET route to retrieve bookings for a user
+  app.get('/bookings/:username', async (req, res) => {
+    try {
+      const username = req.params.username;
+      const bookings = await Booking.find({ username: username });
+
+      const eventIds = bookings.map(booking => booking.eventId);
+      const events = await Event.find({ eventId: { $in: eventIds } }).lean();
+      
+      // 合并 booking 和 event 信息
+      const bookedEvents = bookings.map(booking => {
+        const event = events.find(e => e.eventId === booking.eventId);
+        return {
+          ...booking,
+          ...event, 
+        };
+      });
+
+      res.status(200).json({ bookedEvents});
+    } catch (error) {
+      console.error('Error fetching bookings:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+  // POST route to handle booking cancellation
+  app.post('/cancelBooking', async (req, res) => {
+    try {
+      const { username, eventId } = req.body;
+
+      // Find and delete the booking
+      const booking = await Booking.findOneAndDelete({
+        username: username,
+        eventId: eventId,
+      });
+
+      if (booking) {
+        res.status(200).json({ message: 'Booking cancelled' });
+      } else {
+        res.status(404).json({ message: 'Booking not found' });
+      }
+    } catch (error) {
+      console.error('Error cancelling booking:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+  app.get('/currentUser', (req, res) => {
+    try {
+      const token = req.cookies.jwt;
+      if (!token) {
+        return res.status(401).json({ message: 'Not authenticated' });
+      }
+
+      jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+        if (err) {
+          return res.status(403).json({ message: 'Invalid token' });
+        }
+
+        // Assuming the decoded token contains username
+        res.status(200).json({ username: decodedToken.username });
+      });
+    } catch (error) {
+      console.error('Error getting current user:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+  // POST route to handle likes/unlikes
+  app.post('/likes', async (req, res) => {
+    try {
+      const { username, eventId, title } = req.body;
+
+      // Check if the like already exists
+      const existingLike = await Like.findOne({
+        username: username,
+        eventId: eventId,
+      });
+
+      if (existingLike) {
+        // Unlike the event (delete the like)
+        await Like.deleteOne({ _id: existingLike._id });
+        res.status(200).json({ message: 'Event unliked' });
+      } else {
+        // Like the event
+        const newLike = new Like({ username, eventId, title });
+        await newLike.save();
+        res.status(201).json({ message: 'Event liked' });
+      }
+    } catch (error) {
+      console.error('Error handling like:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+  // GET route to retrieve liked events for a user
+  app.get('/likes/:username', async (req, res) => {
+    try {
+      const username = req.params.username;
+      const likes = await Like.find({ username: username }).lean();
+  
+      const eventIds = likes.map((like) => like.eventId);
+      const events = await Event.find({ eventId: { $in: eventIds } }).lean();
+  
+      res.status(200).json({ likedEvents: events });
+    } catch (error) {
+      console.error('Error fetching likes:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+app.post('/favourites', async (req, res) => {
+    try {
+      const { username, locId } = req.body;
+  
+      const existingFavourite = await Favourite.findOne({ username, locId });
+  
+      if (existingFavourite) {
+        await Favourite.deleteOne({ _id: existingFavourite._id });
+        res.status(200).json({ message: 'Location removed from favourites' });
+      } else {
+        const newFavourite = new Favourite({ username, locId });
+        await newFavourite.save();
+        res.status(201).json({ message: 'Location added to favourites' });
+      }
+    } catch (error) {
+      console.error('Error handling favourite:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+  
+  app.get('/favourites/:username', async (req, res) => {
+    try {
+      const username = req.params.username;
+      const favourites = await Favourite.find({ username }).lean();
+  
+      const locIds = favourites.map(fav => fav.locId);
+      const favouriteLocations = await Location.find({ locId: { $in: locIds } }).lean();
+  
+      res.status(200).json({ favourites: favouriteLocations });
+    } catch (error) {
+      console.error('Error fetching favourites:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+  
 });
 const PORT = process.env.PORT;
 const server = app.listen(PORT);
