@@ -135,8 +135,8 @@ class Others extends React.Component {
             <div className='row'>
                 <div className='col-1'></div>
                 <div className='col-5'>
-                <p style={{fontWeight:"bolder",color:"red",fontSize:"x-large"}}>No idea for choosing events?</p>
-                <p style={{fontWeight:"bolder",color:"red",fontSize:"x-large"}}>Tell us your preference!</p>
+                <p style={{fontWeight:"bolder",color:"#0d6efd",fontSize:"x-large"}}>No idea for choosing events?</p>
+                <p style={{fontWeight:"bolder",color:"#0d6efd",fontSize:"x-large"}}>Tell us your preference!</p>
                 <form>
                     <label htmlFor="preference">Your preferred event type?</label>{' '}
                     <select name="preference" id="preference">
@@ -165,8 +165,8 @@ class Others extends React.Component {
                     <button className="btn btn-success" type="button" onClick={this.handlePreference}>Submit</button>
                 </form>
                 </div>
-                <div className='col-6'>
-                    <p style={{color:"orange",fontWeight:"bolder",fontSize:"x-large"}}>Recommendation:</p>
+                <div className='col-5'>
+                    <p style={{color:"#0d6efd",fontWeight:"bolder",fontSize:"x-large"}}>Recommendation:</p>
                     <p id="recommendation"></p>
                 </div>
                 
