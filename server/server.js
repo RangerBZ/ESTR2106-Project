@@ -41,6 +41,12 @@ async function fetchAndParse(url){
     }
 }
 
+<<<<<<< HEAD
+=======
+let qualifySet = [];
+let locSet = {};
+
+>>>>>>> 6a9a742 (Add files via upload)
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Connection error:'));
 db.once('open', () => {
@@ -173,6 +179,7 @@ db.once('open', () => {
       });
       LikeSchema.index({ username: 1, eventId: 1 }, { unique: true });
 
+<<<<<<< HEAD
       const FavouriteSchema = mongoose.Schema({
         username: {
           type: String,
@@ -188,6 +195,8 @@ db.once('open', () => {
 
 
 
+=======
+>>>>>>> 6a9a742 (Add files via upload)
     UserSchema.pre('save', async function (next) {
         if (!this.isModified('password')) return next();
     
@@ -211,7 +220,10 @@ db.once('open', () => {
     const Blacklist=mongoose.model('Blacklist',BlacklistSchema);
     const Booking = mongoose.model('Booking', BookingSchema);
     const Like = mongoose.model('Like', LikeSchema);
+<<<<<<< HEAD
     const Favourite = mongoose.model('Favourite', FavouriteSchema);
+=======
+>>>>>>> 6a9a742 (Add files via upload)
 
 async function userSetup(){
     try{
@@ -842,6 +854,7 @@ app.post('/bookings', async (req, res) => {
       res.status(500).json({ message: 'Server error' });
     }
   });
+<<<<<<< HEAD
 
 app.post('/favourites', async (req, res) => {
     try {
@@ -878,6 +891,8 @@ app.post('/favourites', async (req, res) => {
     }
   });
 
+=======
+>>>>>>> 6a9a742 (Add files via upload)
   
 });
 const PORT = process.env.PORT;
