@@ -41,6 +41,9 @@ async function fetchAndParse(url){
     }
 }
 
+let qualifySet = [];
+let locSet = {};
+
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Connection error:'));
 db.once('open', () => {
@@ -102,7 +105,7 @@ db.once('open', () => {
     const UserSchema = mongoose.Schema({
         username: {
             type: String,
-            required: true,
+            requried: true,
             unique: true
         },
         password: {
@@ -242,8 +245,6 @@ async function clearComment(){
 
 // in total 1024 events, so not all of it?
 async function processData(){
-    const qualifySet = [];
-const locSet = {};
     try{
         // if its return is a promise, then use await and async
         eventData = await fetchAndParse('https://www.lcsd.gov.hk/datagovhk/event/events.xml');
@@ -608,7 +609,7 @@ app.post('/locations/comments',async(req,res)=>{
             let arr2=[];
             arr2.push(context);
 
-            await Comment.create({
+            Comment.create({
                 locId:id,
                 name:arr1,
                 context:arr2
