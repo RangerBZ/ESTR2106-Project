@@ -43,17 +43,80 @@ function Booking() {
     }
   }, [username]); // Re-run when username changes
 
+  const handleCancelBooking = async (event) => {
+    // Show confirmation dialog
+    if (
+      window.confirm(`Do you want to cancel the booking for "${event.title}"?`)
+    ) {
+      try {
+        const response = await fetch('http://localhost:3001/cancelBooking', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: username,
+            eventId: event.eventId,
+          }),
+        });
+
+        if (response.ok) {
+          // Remove the event from bookedEvents state
+          setBookedEvents((prevBookedEvents) =>
+            prevBookedEvents.filter((e) => e.eventId !== event.eventId)
+          );
+        } else {
+          console.error('Cancel booking failed');
+        }
+      } catch (error) {
+        console.error('Error canceling booking:', error);
+      }
+    }
+  };
+
   return (
     <div className="Booking">
       <h2>{username}'s Booked Events</h2>
       {bookedEvents.length > 0 ? (
-        <ul>
-          {bookedEvents.map((event) => (
-            <li key={event.eventId}>
-              <strong>{event.title}</strong> (Event ID: {event.eventId})
-            </li>
-          ))}
-        </ul>
+        <table className="booking-table">
+          <thead>
+            <tr>
+              <th style={{ width: '5%' }}>ID</th>
+              <th style={{ width: '15%' }}>Title</th>
+              <th style={{ width: '5%' }}>Venue</th>
+              <th style={{ width: '5%' }}>Date/Time</th>
+              <th style={{ width: '25%' }}>Description</th>
+              <th style={{ width: '10%' }}>Presenter</th>
+              <th style={{ width: '5%' }}>Price</th>
+              <th style={{ width: '5%' }}>Cancel</th>
+            </tr>
+          </thead>
+          <tbody>
+            {bookedEvents.map((event) => (
+              <tr key={event.eventId}>
+                <td>{event.eventId}</td>
+                <td>{event.title}</td>
+                <td>{event.locId}</td>
+                <td>{event.date}</td>
+                <td
+                  className="description-cell"
+                  title={event.description}
+                >
+                  {event.description && event.description.length > 100
+                    ? `${event.description.substring(0, 100)}...`
+                    : event.description}
+                </td>
+                <td>{event.presenter}</td>
+                <td>{event.price}</td>
+                <td className="cancel-cell">
+                  <i
+                    className="bi bi-x-circle"
+                    style={{ color: 'red', cursor: 'pointer' }}
+                    onClick={() => handleCancelBooking(event)}
+                  ></i>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       ) : (
         <p>No events booked.</p>
       )}

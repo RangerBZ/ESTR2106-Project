@@ -1,152 +1,185 @@
 // Favourites.js
 import React from 'react';
-import './../styles/Events.css';
+import './../styles/Favourite.css';
 import { Link } from 'react-router-dom';
 
 class Favourites extends React.Component {
     constructor(props) {
-        super(props);
-        this.state = {
-            favourites: [], // 存储收藏位置的详细信息
-            allLocations: [], // 存储所有位置的数据
-            allEvents: [], // 存储所有事件的数据
-            isLoading: true, // 加载状态
-            error: null, // 错误信息
-        };
+      super(props);
+      this.state = {
+        username: '',
+        favourites: [],
+        isLoading: true,
+        error: null,
+      };
     }
+  
+    componentDidMount() {
+      this.getCurrentUser();
+    }
+  
+    getCurrentUser = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/currentUser', {
+          method: 'GET',
+          credentials: 'include',
+        });
+        const data = await response.json();
+  
+        this.setState({ username: data.username }, () => {
+          this.fetchFavourites();
+        });
+      } catch (error) {
+        console.error('Error fetching current user:', error);
+        this.setState({ error: error.message, isLoading: false });
+      }
+    };
 
-    async componentDidMount() {
+    fetchFavourites = async () => {
+        const { username } = this.state;
+    
         try {
-            // 获取收藏的 locIds
-            let favourites = JSON.parse(localStorage.getItem('favourites') || '[]');
-            // 确保 locId 的类型一致（假设 locId 是数字）
-            favourites = favourites.map(id => Number(id));
-
-            if (favourites.length === 0) {
-                this.setState({ favourites: [], isLoading: false });
-                return;
-            }
-
-            // 并行获取所有位置和所有事件
-            const [locationsResponse, eventsResponse] = await Promise.all([
-                fetch('http://localhost:3001/locations/show'),
-                fetch('http://localhost:3001/events/all'),
-            ]);
-
-            if (!locationsResponse.ok) {
-                throw new Error('Failed to fetch locations');
-            }
-
-            if (!eventsResponse.ok) {
-                throw new Error('Failed to fetch events');
-            }
-
-            const allLocations = await locationsResponse.json();
-            const allEvents = await eventsResponse.json();
-
-            // 计算每个 locId 的事件数量
-            const eventCountMap = this.getEventCountMap(allEvents);
-
-            // 过滤出收藏的位置信息
-            const favouritesWithDetails = favourites.map(locId => {
-                const location = allLocations.find(loc => loc.locId === locId);
-                if (location) {
-                    const numEvents = eventCountMap[locId] || 0;
-                    return { locId, name: location.name, numEvents };
-                } else {
-                    console.warn(`Location with ID ${locId} not found.`);
-                    return { locId, name: 'Unknown', numEvents: 0 };
-                }
-            });
-
-            this.setState({
-                favourites: favouritesWithDetails,
-                allLocations,
-                allEvents,
-                isLoading: false,
-            });
-        } catch (error) {
-            console.error('Error loading favourites:', error);
-            this.setState({ error: error.message, isLoading: false });
+        // 并行获取收藏位置和所有事件
+        const [favouritesResponse, eventsResponse] = await Promise.all([
+            fetch(`http://localhost:3001/favourites/${username}`, {
+            method: 'GET',
+            credentials: 'include',
+            }),
+            fetch('http://localhost:3001/events/all', {
+            method: 'GET',
+            credentials: 'include',
+            }),
+        ]);
+    
+        if (!favouritesResponse.ok) {
+            throw new Error('Failed to fetch favourites');
         }
-    }
+    
+        if (!eventsResponse.ok) {
+            throw new Error('Failed to fetch events');
+        }
+    
+        const favouritesData = await favouritesResponse.json();
+        const eventsData = await eventsResponse.json();
+    
+        const allEvents = eventsData; // 所有事件列表
+    
+        // 计算每个 locId 的事件数量
+        const eventCountMap = this.getEventCountMap(allEvents);
+    
+        // 合并收藏位置和事件数量
+        const favouritesWithDetails = favouritesData.favourites.map(location => {
+            const locId = location.locId;
+            const numEvents = eventCountMap[locId] || 0;
+            return { ...location, numEvents };
+        });
+    
+        this.setState({
+            favourites: favouritesWithDetails,
+            isLoading: false,
+        });
+        } catch (error) {
+        console.error('Error loading favourites:', error);
+        this.setState({ error: error.message, isLoading: false });
+        }
+    };
 
     getEventCountMap(events) {
         const countMap = {};
         events.forEach(event => {
-            const id = Number(event.locId);
-            if (countMap[id]) {
-                countMap[id]++;
-            } else {
-                countMap[id] = 1;
-            }
+          const locId = Number(event.locId);
+          if (countMap[locId]) {
+            countMap[locId]++;
+          } else {
+            countMap[locId] = 1;
+          }
         });
         return countMap;
-    }
+      }
 
-    handleRemoveFavourite = locId => {
-        // 获取当前收藏列表
-        let favourites = JSON.parse(localStorage.getItem('favourites') || '[]');
-        favourites = favourites.map(id => Number(id));
-        // 移除指定的 locId
-        favourites = favourites.filter(id => id !== locId);
-        // 更新 localStorage
-        localStorage.setItem('favourites', JSON.stringify(favourites));
-        // 更新组件状态
-        this.setState(prevState => ({
-            favourites: prevState.favourites.filter(fav => fav.locId !== locId),
-        }));
-    }
+      handleRemoveFavourite = async locId => {
+        const { username } = this.state;
+    
+        try {
+          const response = await fetch('http://localhost:3001/favourites', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({
+              username: username,
+              locId: locId,
+            }),
+          });
+    
+          if (response.ok) {
+            const data = await response.json();
+            console.log(data.message);
+    
+            // 更新状态
+            this.setState(prevState => ({
+              favourites: prevState.favourites.filter(fav => fav.locId !== locId),
+            }));
+          } else {
+            const errorData = await response.json();
+            console.error('Favourites action failed', errorData.message);
+          }
+        } catch (error) {
+          console.error('Error updating favourites:', error);
+        }
+      };
 
-    render() {
+      render() {
         const { favourites, isLoading, error } = this.state;
-
+    
         if (isLoading) {
-            return <div className='Favourites'><p>Loading...</p></div>;
+          return <div className='Favourites'><p>Loading...</p></div>;
         }
-
+    
         if (error) {
-            return <div className='Favourites'><p>Error: {error}</p></div>;
+          return <div className='Favourites'><p>Error: {error}</p></div>;
         }
-
+    
         return (
-            <div className='Favourites'>
-                <h2>My Favourite Locations</h2>
-                {favourites.length > 0 ? (
-                    <table style={{ width: "100%" }}>
-                        <thead>
-                            <tr style={{ borderBottom: "solid" }}>
-                                <th>ID</th>
-                                <th>Location</th>
-                                <th>Num of Events</th>
-                                <th>Remove from Favourites</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {favourites.map(favourite => (
-                                <tr key={favourite.locId} style={{ borderBottom: "dashed" }}>
-                                    <td>{favourite.locId}</td>
-                                    <td>
-                                        <Link to={`/locations/${favourite.locId}`}>{favourite.name}</Link>
-                                    </td>
-                                    <td>{favourite.numEvents}</td>
-                                    <td>
-                                        <input
-                                            type="checkbox"
-                                            checked={false}
-                                            onChange={() => this.handleRemoveFavourite(favourite.locId)}
-                                        />
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                ) : (
-                    <p>No favourites added yet.</p>
-                )}
-            </div>
+          <div className='Favourites'>
+            <h2>My Favourite Locations</h2>
+            {favourites.length > 0 ? (
+              <div className='table-container'>
+                <table className='favourite-table' style={{ width: "100%" }}>
+                  <thead>
+                    <tr style={{ borderBottom: "solid" }}>
+                      <th>ID</th>
+                      <th>Location</th>
+                      <th>Num of Events</th>
+                      <th>Remove from Favourites</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {favourites.map(favourite => (
+                      <tr key={favourite.locId} style={{ borderBottom: "dashed" }}>
+                        <td>{favourite.locId}</td>
+                        <td>
+                          <Link to={`/locations/${favourite.locId}`}>{favourite.name}</Link>
+                        </td>
+                        <td>{favourite.numEvents}</td>
+                        <td>
+                          <input
+                            type="checkbox"
+                            checked={true}
+                            onChange={() => this.handleRemoveFavourite(favourite.locId)}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p>No favourites added yet.</p>
+            )}
+          </div>
         );
+      }
+
     }
-}
 
 export default Favourites;
