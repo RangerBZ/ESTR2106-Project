@@ -9,6 +9,7 @@ import Favourites from './components/Favourites';
 import Others from './components/Others';
 import SingleLoc from './components/SingleLoc';
 import Manage from './components/Manage';
+import Booking from './components/Booking';
 import { AuthContext, AuthProvider } from './services/AuthContext';
 import Login from './components/Login';
 import Darkmode from 'darkmode-js';
@@ -242,7 +243,7 @@ class App extends React.Component {
           </li>
           <li className="nav-item">
             <Link to="/favourites" className="nav-link d-flex align-items-center">
-              <i className="bi bi-star me-2"></i> Favourites
+              <i className="bi bi-hearts me-2"></i> Favourites
             </Link>
           </li>
           <li className="nav-item">
