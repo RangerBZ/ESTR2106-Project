@@ -1,6 +1,6 @@
 .navigation-container {
     /* Ensure the container takes up only 70% width and is centered */
-    max-width: 95%;
+    max-width: 100%;
     margin-left: auto;
     margin-right: auto;
   }
