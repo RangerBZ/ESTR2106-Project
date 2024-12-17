@@ -176,6 +176,21 @@ db.once('open', () => {
       });
       LikeSchema.index({ username: 1, eventId: 1 }, { unique: true });
 
+      const FavouriteSchema = mongoose.Schema({
+        username: {
+          type: String,
+          required: true,
+        },
+        locId: {
+          type: Number,
+          required: true,
+        },
+      });
+      
+      FavouriteSchema.index({ username: 1, locId: 1 }, { unique: true });
+
+
+
     UserSchema.pre('save', async function (next) {
         if (!this.isModified('password')) return next();
     
@@ -199,6 +214,7 @@ db.once('open', () => {
     const Blacklist=mongoose.model('Blacklist',BlacklistSchema);
     const Booking = mongoose.model('Booking', BookingSchema);
     const Like = mongoose.model('Like', LikeSchema);
+    const Favourite = mongoose.model('Favourite', FavouriteSchema);
 
 async function userSetup(){
     try{
@@ -827,6 +843,42 @@ app.post('/bookings', async (req, res) => {
       res.status(500).json({ message: 'Server error' });
     }
   });
+
+app.post('/favourites', async (req, res) => {
+    try {
+      const { username, locId } = req.body;
+  
+      const existingFavourite = await Favourite.findOne({ username, locId });
+  
+      if (existingFavourite) {
+        await Favourite.deleteOne({ _id: existingFavourite._id });
+        res.status(200).json({ message: 'Location removed from favourites' });
+      } else {
+        const newFavourite = new Favourite({ username, locId });
+        await newFavourite.save();
+        res.status(201).json({ message: 'Location added to favourites' });
+      }
+    } catch (error) {
+      console.error('Error handling favourite:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+  
+  app.get('/favourites/:username', async (req, res) => {
+    try {
+      const username = req.params.username;
+      const favourites = await Favourite.find({ username }).lean();
+  
+      const locIds = favourites.map(fav => fav.locId);
+      const favouriteLocations = await Location.find({ locId: { $in: locIds } }).lean();
+  
+      res.status(200).json({ favourites: favouriteLocations });
+    } catch (error) {
+      console.error('Error fetching favourites:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
   
 });
 const PORT = process.env.PORT;
