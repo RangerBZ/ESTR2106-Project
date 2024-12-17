@@ -32,8 +32,6 @@
 
 /* 表格样式 */
 .favourite-table {
-    table-layout: fixed; /* 固定表格布局 */
-    width: 100%;
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(10px);
     border-radius: 10px;
