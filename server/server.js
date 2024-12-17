@@ -41,8 +41,8 @@ async function fetchAndParse(url){
     }
 }
 
-const qualifySet = [];
-const locSet = {};
+let qualifySet = [];
+let locSet = {};
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Connection error:'));
@@ -160,6 +160,22 @@ db.once('open', () => {
         },
       });
 
+      const LikeSchema = mongoose.Schema({
+        username: {
+          type: String,
+          required: true,
+        },
+        eventId: {
+          type: Number,
+          required: true,
+        },
+        title: {
+          type: String,
+          required: true,
+        },
+      });
+      LikeSchema.index({ username: 1, eventId: 1 }, { unique: true });
+
     UserSchema.pre('save', async function (next) {
         if (!this.isModified('password')) return next();
     
@@ -182,6 +198,7 @@ db.once('open', () => {
     const Comment=mongoose.model('Comment',CommentSchema);
     const Blacklist=mongoose.model('Blacklist',BlacklistSchema);
     const Booking = mongoose.model('Booking', BookingSchema);
+    const Like = mongoose.model('Like', LikeSchema);
 
 async function userSetup(){
     try{
@@ -219,6 +236,7 @@ async function processData(){
         //console.log(eventData);
         partial_events = eventData.events.event.slice(0, 550);
         const eventsPromises = [];
+        locSet={};
 
     for (const element of partial_events) {
 
@@ -277,8 +295,14 @@ async function processData(){
         if(display){
             for(item of qualifySet){
                 //console.log(Math.abs(vId-item.locId));
-                if(Math.abs(vId-item.locId) < 10000)
+                if(Math.abs(vId-item.locId) < 10000&& vId!=item.locId){
                     display = false;
+                    break;
+                }
+                if(vId==item.locId){
+                    display=true;
+                    break;
+                }
             }
             qualifySet.push({
                 locId: vId,
@@ -404,7 +428,7 @@ app.get('/events/:eventID', async (req, res) => {
 app.get('/locations/show', async (req, res) => {
     try{
         const locationShown = await Location.find({ shown: { $eq: true} });
-        //console.log(locationShown);
+        console.log(locationShown);
         res.status(200).json(locationShown);
     }catch(err){
         res.status(404).send(err);
@@ -698,14 +722,48 @@ app.post('/bookings', async (req, res) => {
     try {
       const username = req.params.username;
       const bookings = await Booking.find({ username: username });
-      res.status(200).json({ bookedEvents: bookings });
+
+      const eventIds = bookings.map(booking => booking.eventId);
+      const events = await Event.find({ eventId: { $in: eventIds } }).lean();
+      
+      // 合并 booking 和 event 信息
+      const bookedEvents = bookings.map(booking => {
+        const event = events.find(e => e.eventId === booking.eventId);
+        return {
+          ...booking,
+          ...event, 
+        };
+      });
+
+      res.status(200).json({ bookedEvents});
     } catch (error) {
       console.error('Error fetching bookings:', error);
       res.status(500).json({ message: 'Server error' });
     }
   });
 
-  // (Optional) GET route to get current user info
+  // POST route to handle booking cancellation
+  app.post('/cancelBooking', async (req, res) => {
+    try {
+      const { username, eventId } = req.body;
+
+      // Find and delete the booking
+      const booking = await Booking.findOneAndDelete({
+        username: username,
+        eventId: eventId,
+      });
+
+      if (booking) {
+        res.status(200).json({ message: 'Booking cancelled' });
+      } else {
+        res.status(404).json({ message: 'Booking not found' });
+      }
+    } catch (error) {
+      console.error('Error cancelling booking:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
   app.get('/currentUser', (req, res) => {
     try {
       const token = req.cookies.jwt;
@@ -727,6 +785,49 @@ app.post('/bookings', async (req, res) => {
     }
   });
 
+  // POST route to handle likes/unlikes
+  app.post('/likes', async (req, res) => {
+    try {
+      const { username, eventId, title } = req.body;
+
+      // Check if the like already exists
+      const existingLike = await Like.findOne({
+        username: username,
+        eventId: eventId,
+      });
+
+      if (existingLike) {
+        // Unlike the event (delete the like)
+        await Like.deleteOne({ _id: existingLike._id });
+        res.status(200).json({ message: 'Event unliked' });
+      } else {
+        // Like the event
+        const newLike = new Like({ username, eventId, title });
+        await newLike.save();
+        res.status(201).json({ message: 'Event liked' });
+      }
+    } catch (error) {
+      console.error('Error handling like:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+  // GET route to retrieve liked events for a user
+  app.get('/likes/:username', async (req, res) => {
+    try {
+      const username = req.params.username;
+      const likes = await Like.find({ username: username }).lean();
+  
+      const eventIds = likes.map((like) => like.eventId);
+      const events = await Event.find({ eventId: { $in: eventIds } }).lean();
+  
+      res.status(200).json({ likedEvents: events });
+    } catch (error) {
+      console.error('Error fetching likes:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+  
 });
 const PORT = process.env.PORT;
 const server = app.listen(PORT);
