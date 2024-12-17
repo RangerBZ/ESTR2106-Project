@@ -5,15 +5,33 @@
     flex-wrap: wrap;
 }
 
-
-.booking-table {
+table {
     width: 100%;
+    border: 1px solid black;
     border-collapse: collapse;
 }
 
-.booking-table th,
-.booking-table td {
-    border-bottom: 1px dashed #ccc;
-    padding: 8px;
-    text-align: left;
+thead {
+    background-color: #f2f2f2; /* Different background color for header */
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 10px; /* Added padding for better spacing */
+    text-align: left; /* Unified text alignment */
+    vertical-align: middle;
+}
+
+th {
+    /* Optional: Make header text bold */
+    font-weight: bold;
+}
+
+.cancel-cell {
+    text-align: center;        
+    vertical-align: middle;   
+}
+
+.bi-x-circle{
+    font-size: 24px;
 }
