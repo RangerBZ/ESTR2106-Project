@@ -41,12 +41,6 @@ async function fetchAndParse(url){
     }
 }
 
-<<<<<<< HEAD
-=======
-let qualifySet = [];
-let locSet = {};
->>>>>>> d2aaa9d7a88871289326dd31bab8d36d34ccfc6e
-
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Connection error:'));
 db.once('open', () => {
