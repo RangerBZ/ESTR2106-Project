@@ -145,6 +145,21 @@ db.once('open', () => {
         }
     })
 
+    const BookingSchema = mongoose.Schema({
+        username: {
+          type: String,
+          required: true,
+        },
+        eventId: {
+          type: Number,
+          required: true,
+        },
+        title: {
+          type: String,
+          required: true,
+        },
+      });
+
     UserSchema.pre('save', async function (next) {
         if (!this.isModified('password')) return next();
     
@@ -166,6 +181,7 @@ db.once('open', () => {
     const User = mongoose.model('User', UserSchema);
     const Comment=mongoose.model('Comment',CommentSchema);
     const Blacklist=mongoose.model('Blacklist',BlacklistSchema);
+    const Booking = mongoose.model('Booking', BookingSchema);
 
 async function userSetup(){
     try{
@@ -308,7 +324,7 @@ app.post('/login', async (req, res) => {
         }else{
             if(!existing.matchPassword(password))
                 res.status(400).send('Incorrect password');
-            const token = jwt.sign({id: existing._id, admin: existing.admin}, process.env.JWT_SECRET, { expiresIn: '2h'});
+            const token = jwt.sign({id: existing._id, admin: existing.admin,username: existing.username}, process.env.JWT_SECRET, { expiresIn: '2h'});
             //console.log(token);
             await clearData();
             await processData();
@@ -654,6 +670,62 @@ app.post('/block/acquire',async(req,res)=>{
     }
 })
 
+app.post('/bookings', async (req, res) => {
+    try {
+      const { username, eventId, title } = req.body;
+
+      // Check if the booking already exists
+      const existingBooking = await Booking.findOne({
+        username: username,
+        eventId: eventId,
+      });
+
+      if (existingBooking) {
+        return res.status(400).json({ message: 'Event already booked' });
+      }
+
+      const newBooking = new Booking({ username, eventId, title });
+      await newBooking.save();
+      res.status(201).json({ message: 'Booking successful' });
+    } catch (error) {
+      console.error('Error handling booking:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+  // GET route to retrieve bookings for a user
+  app.get('/bookings/:username', async (req, res) => {
+    try {
+      const username = req.params.username;
+      const bookings = await Booking.find({ username: username });
+      res.status(200).json({ bookedEvents: bookings });
+    } catch (error) {
+      console.error('Error fetching bookings:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+  // (Optional) GET route to get current user info
+  app.get('/currentUser', (req, res) => {
+    try {
+      const token = req.cookies.jwt;
+      if (!token) {
+        return res.status(401).json({ message: 'Not authenticated' });
+      }
+
+      jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+        if (err) {
+          return res.status(403).json({ message: 'Invalid token' });
+        }
+
+        // Assuming the decoded token contains username
+        res.status(200).json({ username: decodedToken.username });
+      });
+    } catch (error) {
+      console.error('Error getting current user:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
 
 });
 const PORT = process.env.PORT;
