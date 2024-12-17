@@ -1,0 +1,23 @@
+.Favourites{
+    display: flex;
+    padding: 20px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.table-container {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.favourite-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.favourite-table th,
+.favourite-table td {
+    border-bottom: 1px dashed #ccc;
+    padding: 8px;
+    text-align: left;
+}

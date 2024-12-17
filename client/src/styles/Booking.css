@@ -1,0 +1,19 @@
+.Booking{
+    display: flex;
+    padding: 20px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+
+.booking-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.booking-table th,
+.booking-table td {
+    border-bottom: 1px dashed #ccc;
+    padding: 8px;
+    text-align: left;
+}
