@@ -7,4 +7,21 @@
 *{
     font-family: "merriweather", sans-serif;
     font-size: medium;
+<<<<<<< HEAD
+=======
+}
+
+.link :hover {
+  animation-name: float-bar;
+  animation-duration: 1s;
+}
+
+@keyframes float-bar {
+  to {
+    font-size: larger;
+    transform: translate(3px, 3px);
+    box-shadow: 3px 3px 28px grey;
+    border-radius: 7px;
+  }
+>>>>>>> 2fb5d5ba1dc36d2d5fb94e2d6afb871001e1ced3
 }

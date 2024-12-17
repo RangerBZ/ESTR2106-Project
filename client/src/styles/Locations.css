@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* src/styles/Locations.css */
 
 /* 主容器样式 */
@@ -169,4 +170,118 @@
     .sort-icons i {
         font-size: 18px;
     }
+=======
+/* Locations.css */
+
+
+
+/* Main container for the Locations component */
+.locations-container {
+    display: flex;
+    padding: 20px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Left section: Location List Title */
+.left-section {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* Right section: Filters */
+.right-section {
+    flex: 2;
+    display: flex;
+    align-items:baseline;
+    gap: 20px;
+    flex-wrap: wrap;
+    min-width: 300px;
+    justify-content: flex-end; 
+    padding-right: 20px; 
+}
+
+.filter-label{
+    vertical-align: bottom;
+}
+
+/* Individual filter item */
+.filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 150px;
+}
+
+/* Slider styling */
+.distance-slider {
+    width: 150px;
+}
+
+/* Current distance display */
+.distance-value {
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+/* Table container */
+.table-container {
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Table styling */
+.locations-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.locations-table th,
+.locations-table td {
+    border-bottom: 1px dashed #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+.bi-sort-numeric-down-alt,
+.bi-sort-numeric-down {
+    font-size: 22px;
+}
+/* Sort icons styling */
+.sort-icons {
+    display: inline;
+    align-items: center;
+    gap: 5px;
+}
+
+.sort-icons i {
+    cursor: pointer;
+    color: #6c757d; /* Bootstrap secondary color */
+    transition: color 0.3s;
+}
+
+.sort-icons i:hover {
+    color: #2168d2; /* Bootstrap primary color on hover */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .locations-container {
+        flex-direction: column;
+    }
+
+    .right-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .filter-item {
+        min-width: 100%;
+    }
+
+    .distance-slider {
+        width: 100%;
+    }
+>>>>>>> 2fb5d5ba1dc36d2d5fb94e2d6afb871001e1ced3
 }

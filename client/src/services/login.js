@@ -18,7 +18,7 @@ async function login(username, password){
             return true;
         }
         else{
-            console.error('Login failed');
+            alert('Login failed');
             return false;
         }
     }catch(error){
@@ -28,9 +28,9 @@ async function login(username, password){
 }
 
 function getAdmin(){
-    console.log(document.cookie);
+    //console.log(document.cookie);
     const match = document.cookie.match(new RegExp('(^| )' + 'jwt' + '=([^;]+)'));
-    console.log(match);
+    //console.log(match);
     const token =  match ? match[2] : null;
     const info = jwtDecode(token);
     if(info && 'admin' in info)

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* src/styles/Favourite.css */
 
 /* 主容器样式 */
@@ -146,4 +147,28 @@
     .remove-button i {
         font-size: 1rem;
     }
+=======
+.Favourites{
+    display: flex;
+    padding: 20px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.table-container {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.favourite-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.favourite-table th,
+.favourite-table td {
+    border-bottom: 1px dashed #ccc;
+    padding: 8px;
+    text-align: left;
+>>>>>>> 2fb5d5ba1dc36d2d5fb94e2d6afb871001e1ced3
 }

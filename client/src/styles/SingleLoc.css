@@ -1,0 +1,19 @@
+.SingleLoc {
+    background-color:azure;
+    padding: 4vh;
+}
+
+.title {
+    color:brown;
+    text-align: center;
+}
+
+.geo{
+    color:blueviolet;
+    text-align:center;
+}
+
+.link{
+    color:black;
+    text-decoration: none;
+}

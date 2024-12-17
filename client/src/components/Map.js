@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useJsApiLoader, GoogleMap } from '@react-google-maps/api';
+import { Link } from 'react-router-dom';
   
   const containerStyle = {
     width: '100%',
-    height: '75vh',
+    height: '65vh',
     padding: '4vh',
     border: '2px solid black'
   };
@@ -19,6 +20,7 @@ import { useJsApiLoader, GoogleMap } from '@react-google-maps/api';
     const [placesService, setPlacesService] = useState(null); 
     const [map, setMap] = useState(null); // Store the map instance
     const [markers, setMarkers] = useState([]);
+    const [selectedLocation, setSelectedLocation] = useState(null);
   
     const { isLoaded, loadError } = useJsApiLoader({
       id: 'google-map-script',
@@ -55,7 +57,7 @@ import { useJsApiLoader, GoogleMap } from '@react-google-maps/api';
             placesService.findPlaceFromQuery(request, (results, status) => {
               if (status === window.google.maps.places.PlacesServiceStatus.OK && results) {
                 const place = results[0];
-                createMarker(place, location.name);
+                createMarker(location, place, location.name);
               } else {
                 console.warn(`No place found for "${location.name}":`, status);
               }
@@ -75,7 +77,7 @@ import { useJsApiLoader, GoogleMap } from '@react-google-maps/api';
       return title.replace(/\s*$[^)]*$\s*/g, '').trim();
     };
   
-    const createMarker = (place, originalTitle) => {
+    const createMarker = (location, place, originalTitle) => {
       const markerContent = document.createElement('div');
       markerContent.innerHTML = 
         `<div style="display: flex; align-items: center;">
@@ -113,6 +115,7 @@ import { useJsApiLoader, GoogleMap } from '@react-google-maps/api';
           map,
           shouldFocus: false,
         });
+        setSelectedLocation({ location, place, originalTitle });
       });
   
       setMarkers(prevMarkers => [...prevMarkers, advancedMarker]);
@@ -122,6 +125,7 @@ import { useJsApiLoader, GoogleMap } from '@react-google-maps/api';
     if (!isLoaded) return <div>Loading...</div>;
   
     return (
+     <div>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
@@ -131,6 +135,15 @@ import { useJsApiLoader, GoogleMap } from '@react-google-maps/api';
       >
         {/* No need to render markers here; they are created manually */}
       </GoogleMap>
+      {selectedLocation && (
+        <div style={{ padding: '10px', marginTop: '10px', border: '1px solid #ccc' }}>
+          <strong>{selectedLocation.originalTitle}</strong><br />
+          Location: {selectedLocation.place.formatted_address}<br /><br />
+          <Link to={`/locations/${selectedLocation.location.locId}`}>
+            Go to Location Page
+          </Link>
+        </div>
+      )}</div>
     );
   };
   

@@ -31,7 +31,10 @@
     "darkmode-js": "^1.5.7",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
+<<<<<<< HEAD
     "react-bootstrap": "^2.10.7",
+=======
+>>>>>>> 2fb5d5ba1dc36d2d5fb94e2d6afb871001e1ced3
     "react-dom": "^18.3.1",
     "react-icons": "^5.4.0",
     "react-router-dom": "^7.0.2",
