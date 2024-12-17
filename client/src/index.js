@@ -14,6 +14,7 @@ import Login from './components/Login';
 import Darkmode from 'darkmode-js';
 
 import './styles/all.css';
+import './styles/index.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 class App extends React.Component {
@@ -190,12 +191,12 @@ class App extends React.Component {
         color: 'black'
       };
 
-      const headStyle={
-        backgroundColor:"rgb(204,255,204)",   
-        textAlign:"center",
-        color:"rgb(0,120,255)",
-        fontFamily:"sans-serif"
-      }
+      const headStyle = {
+        backgroundColor: "azure",   // Light blue background
+        color: "black",
+        fontFamily: "sans-serif",
+        padding: "20px",                // Increased padding for inner spacing
+        }                  // Adjust width to make it look like a floating module
 
       const userRoleStyle = {
         backgroundColor: "lightgrey",
@@ -212,36 +213,56 @@ class App extends React.Component {
       return(
             <BrowserRouter>
                 <div>
-                <h2 style={headStyle}>
-                    HONG KONG
-                    <p style={{fontSize:"x-large",fontWeight:"600"}}>Cultural diving</p>
-                </h2>
-                  <ul style={routerStyle}>
-                        <li>{' '}
-                        <Link to="/" style={linkStyle} className='link'><i className="bi bi-house"></i> Home</Link>{' '}
-                        </li>
-                        <li>{' '}
-                        <Link to="/events" style={linkStyle} className='link'><i className="bi bi-list-columns-reverse"></i> List of Events</Link>{' '}
-                        </li>
-                        <li>{' '}
-                        <Link to="/locations" style={linkStyle} className='link'><i className="bi bi-list-columns-reverse"></i> List of Locations</Link>{' '}
-                        </li>
-                        <li>{' '}
-                        <Link to="/map" style={linkStyle} className='link'><i className="bi bi-map"></i> Map</Link>{' '}
-                        </li>
-                        <li>{' '}
-                        <Link to="/favourites" style={linkStyle} className='link'><i className="bi bi-star"></i> Favourites</Link>{' '}
-                        </li>
-                        <li>{' '}
-                        <Link to="/others" style={linkStyle} className='link'>No idea?</Link>{' '}
-                        </li>{' '}
-                        {userRole && (<li>{' '}
-                        <Link to="/admin" style={linkStyle} className='link'>Manage database</Link>
-                        </li>)}
-                        <div style={userRoleStyle} onClick={this.handleUserRoleClick}>
-                        {userRole ? "Admin: "+userName : "User: "+userName}
-                        </div>
-                  </ul>
+                <div style={headStyle}>
+      <h2 className="display-4 mb-0">HONG KONG</h2>
+      <p className="fs-3 fw-bold text-uppercase">Cultural diving</p>
+    </div>
+    <div className="navigation-container">
+        {/* 导航栏 */}
+        <ul className="nav nav-pills mb-3" style={{ width: '90%', marginLeft: 'auto', marginRight: 'auto' }}>
+          <li className="nav-item">
+            <Link to="/" className="nav-link d-flex align-items-center">
+              <i className="bi bi-house me-2"></i> Home
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/events" className="nav-link d-flex align-items-center">
+              <i className="bi bi-list-columns-reverse me-2"></i> List of Events
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/locations" className="nav-link d-flex align-items-center">
+              <i className="bi bi-list-columns-reverse me-2"></i> List of Locations
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/map" className="nav-link d-flex align-items-center">
+              <i className="bi bi-map me-2"></i> Map
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/favourites" className="nav-link d-flex align-items-center">
+              <i className="bi bi-star me-2"></i> Favourites
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/others" className="nav-link">No idea?</Link>
+          </li>
+          {userRole && (
+            <li className="nav-item">
+              <Link to="/admin" className="nav-link">Manage database</Link>
+            </li>
+          )}
+          <li className="nav-item"
+          onClick={this.handleUserRoleClick}
+          style={{ cursor: "pointer" }}
+        ><div className="nav-link d-flex align-items-center" style={{color: 'black'}}>
+          {userRole ? `Admin: ${userName}` : `User: ${userName}`}</div>
+        </li>
+        </ul>
+
+        {/* User Role Display */}
+      </div>
                 </div>
 
                 <Routes>
@@ -270,9 +291,24 @@ class Home extends React.Component{
    constructor(props) {
     super(props);
     this.state = {
-        updateTime: null
-    }
+        updateTime: null,
+        slideIndex: 0,
+        images:[
+            { url: 'images/performing_1.jpg', color: 'initial'},
+            { url: 'images/performing_2.jpg', color: 'transparent'},
+            { url: 'images/performing_3.jpg', color: 'transparent'},
+            { url: 'images/performing_4.jpg', color: 'transparent'}
+        ]
+    };
    }
+
+
+   showSlides = (n) => {
+    let { slideIndex } = this.state;
+    slideIndex = (slideIndex + n + 4) % 4; // Wrap around logic
+
+    this.setState({ slideIndex });
+  };
 
    componentDidMount(){
      const startTime = String(new Date());
@@ -280,12 +316,28 @@ class Home extends React.Component{
    }
 
     render(){
+        const { slideIndex, images } = this.state;
+
         return(
-            <div>
-              <div>
-                <p>Data last updated: {this.state.updateTime}</p>
-              </div>
-            </div>
+            <div className="d-flex flex-column justify-content-center align-items-center">
+        {/* Backup element with dynamic styles */}
+        <div id="backup" style={{
+          backgroundImage: `url(${images[slideIndex].url})`,
+          color: images[slideIndex].color,
+          width: '80%', // Adjust as necessary
+          height: '60vh', // Adjust as necessary
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          borderRadius: '8px',
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
+        }} />
+
+        {/* Controls for the slideshow */}
+        <div className="mt-3 d-flex gap-2">
+          <button onClick={() => this.showSlides(-1)} className="btn btn-secondary">Previous</button>
+          <button onClick={() => this.showSlides(1)} className="btn btn-secondary">Next</button>
+        </div>
+      </div>
         )
     }
 }

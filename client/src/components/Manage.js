@@ -23,31 +23,45 @@ class Manage extends React.Component {
             gap: '20px',
         };
 
-        const linkStyle = {
-            textDecoration: 'none',
-            color: 'black',
-            cursor: 'pointer',
-        };
 
         const { currentPage } = this.state;
 
         return (
-            <div>
+            <div className="navigation-container">
                 {/* 导航栏 */}
-                <ul style={routerStyle}>
-                    <li style={linkStyle} onClick={() => this.navigateTo('NewEvent')}>New Event</li>
-                    <li style={linkStyle} onClick={() => this.navigateTo('ModifyEvent')}>Modify Event</li>
-                    <li style={linkStyle} onClick={() => this.navigateTo('CreateUser')}>Create User</li>
-                    <li style={linkStyle} onClick={() => this.navigateTo('ModifyUser')}>Modify User</li>
-                </ul>
-
-                <div>
-                    {currentPage === 'NewEvent' && <NewEvent />}
-                    {currentPage === 'ModifyEvent' && <ModifyEvent />}
-                    {currentPage === 'CreateUser' && <CreateUser />}
-                    {currentPage === 'ModifyUser' && <ModifyUser />}
-                </div>
+                <nav className="navbar navbar-expand-lg navbar-light bg-light mb-3">
+          <div className="container-fluid">
+            <a className="navbar-brand" href="#">Management</a>
+            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span className="navbar-toggler-icon"></span>
+            </button>
+            <div className="collapse navbar-collapse" id="navbarNav">
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                <li className="nav-item">
+                  <a className="nav-link" onClick={() => this.navigateTo('NewEvent')}>New Event</a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" onClick={() => this.navigateTo('ModifyEvent')}>Modify Event</a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" onClick={() => this.navigateTo('CreateUser')}>Create User</a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" onClick={() => this.navigateTo('ModifyUser')}>Modify User</a>
+                </li>
+              </ul>
             </div>
+          </div>
+        </nav>
+
+        <div className="container mt-4">
+          {/* Render the current page component */}
+          {currentPage === 'NewEvent' && <NewEvent />}
+          {currentPage === 'ModifyEvent' && <ModifyEvent />}
+          {currentPage === 'CreateUser' && <CreateUser />}
+          {currentPage === 'ModifyUser' && <ModifyUser />}
+        </div>
+      </div>
         );
     }
 }
@@ -114,7 +128,7 @@ class NewEvent extends React.Component {
 
     render() {
         return (
-            <div className="d-flex justify-content-center align-items-center vh-100">
+            <div className="container-fluid main-content d-flex flex-column justify-content-center align-items-center mt-5">
   <div className="col-md-6 col-lg-4">
     <div className="p-4 bg-light rounded shadow">
       <form onSubmit={async (event) => { await this.handleSubmit(event); }} id='newEvent'>
@@ -307,7 +321,7 @@ class ModifyEvent extends React.Component {
 
     render() {
         return (
-            <div className="d-flex justify-content-center align-items-center vh-100">
+            <div className="container-fluid main-content d-flex flex-column justify-content-center align-items-center mt-5">
             <div className="col-md-6 col-lg-4">
             <div className="p-4 bg-light rounded shadow">
                 <form onSubmit={async (event) => {await this.handleSubmit(event)}} id='modifyEvent'>
@@ -386,7 +400,7 @@ class CreateUser extends React.Component {
 
     render() {
         return (
-                <div className="d-flex justify-content-center align-items-center vh-100">
+            <div className="container-fluid main-content d-flex flex-column justify-content-center align-items-center mt-5">
         <div className="col-md-6 col-lg-4">
           <div className="p-4 bg-light rounded shadow">
             <form onSubmit={async(event) => { await this.handleSubmit(event);}}>
@@ -497,7 +511,7 @@ class ModifyUser extends React.Component {
 
     render() {
         return (
-            <div className="d-flex justify-content-center align-items-center vh-100">
+            <div className="container-fluid main-content d-flex flex-column justify-content-center align-items-center mt-5">
         <div className="col-md-6 col-lg-4">
           <div className="p-4 bg-light rounded shadow">
             <form id='modUser' onSubmit={async (event) => { await this.handleSubmit(event);}}>

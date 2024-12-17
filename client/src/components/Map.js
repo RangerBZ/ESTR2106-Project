@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
   
   const containerStyle = {
     width: '100%',
-    height: '75vh',
+    height: '65vh',
     padding: '4vh',
     border: '2px solid black'
   };

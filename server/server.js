@@ -41,12 +41,9 @@ async function fetchAndParse(url){
     }
 }
 
-<<<<<<< HEAD
-=======
 let qualifySet = [];
 let locSet = {};
 
->>>>>>> 6a9a742 (Add files via upload)
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Connection error:'));
 db.once('open', () => {
@@ -108,7 +105,7 @@ db.once('open', () => {
     const UserSchema = mongoose.Schema({
         username: {
             type: String,
-            required: true,
+            requried: true,
             unique: true
         },
         password: {
@@ -179,7 +176,6 @@ db.once('open', () => {
       });
       LikeSchema.index({ username: 1, eventId: 1 }, { unique: true });
 
-<<<<<<< HEAD
       const FavouriteSchema = mongoose.Schema({
         username: {
           type: String,
@@ -195,8 +191,6 @@ db.once('open', () => {
 
 
 
-=======
->>>>>>> 6a9a742 (Add files via upload)
     UserSchema.pre('save', async function (next) {
         if (!this.isModified('password')) return next();
     
@@ -220,10 +214,7 @@ db.once('open', () => {
     const Blacklist=mongoose.model('Blacklist',BlacklistSchema);
     const Booking = mongoose.model('Booking', BookingSchema);
     const Like = mongoose.model('Like', LikeSchema);
-<<<<<<< HEAD
     const Favourite = mongoose.model('Favourite', FavouriteSchema);
-=======
->>>>>>> 6a9a742 (Add files via upload)
 
 async function userSetup(){
     try{
@@ -254,8 +245,6 @@ async function clearComment(){
 
 // in total 1024 events, so not all of it?
 async function processData(){
-    const qualifySet = [];
-const locSet = {};
     try{
         // if its return is a promise, then use await and async
         eventData = await fetchAndParse('https://www.lcsd.gov.hk/datagovhk/event/events.xml');
@@ -620,7 +609,7 @@ app.post('/locations/comments',async(req,res)=>{
             let arr2=[];
             arr2.push(context);
 
-            await Comment.create({
+            Comment.create({
                 locId:id,
                 name:arr1,
                 context:arr2
@@ -854,7 +843,6 @@ app.post('/bookings', async (req, res) => {
       res.status(500).json({ message: 'Server error' });
     }
   });
-<<<<<<< HEAD
 
 app.post('/favourites', async (req, res) => {
     try {
@@ -891,8 +879,6 @@ app.post('/favourites', async (req, res) => {
     }
   });
 
-=======
->>>>>>> 6a9a742 (Add files via upload)
   
 });
 const PORT = process.env.PORT;
