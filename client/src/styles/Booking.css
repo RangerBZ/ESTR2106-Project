@@ -1,14 +1,14 @@
-/* src/styles/Locations.css */
+/* src/styles/Booking.css */
 
 /* 主容器样式 */
-.locations-container {
+.Booking {
     background: linear-gradient(135deg, #ece9e6, #ffffff);
     min-height: 100vh;
     padding: 20px;
 }
 
 /* 标题样式 */
-.location-title {
+.booking-title {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 2.5rem;
     color: #0d6efd; /* Bootstrap 主蓝色 */
@@ -31,7 +31,7 @@
 }
 
 /* 表格样式 */
-.locations-table {
+.booking-table {
     table-layout: fixed; /* 固定表格布局 */
     width: 100%;
     background: rgba(255, 255, 255, 0.8);
@@ -41,13 +41,15 @@
     transition: box-shadow 0.3s;
 }
 
-.locations-table thead {
+/* 表头样式 */
+.booking-table thead {
     background-color: rgba(13, 110, 253, 0.8); /* Bootstrap 主蓝色带透明度 */
     color: rgb(0, 0, 0);
 }
 
-.locations-table th, 
-.locations-table td {
+/* 表格单元格样式 */
+.description-cell {
+    max-width: 250px;
     border: 1px solid #dee2e6;
     padding: 12px 15px;
     text-align: left;
@@ -58,7 +60,7 @@
 }
 
 /* 表格行悬浮效果 */
-.location-row:hover {
+.booking-row:hover {
     box-shadow: 0 12px 24px rgba(0,0,0,0.2);
     background: rgba(0, 123, 255, 0.05);
     /* 移除缩放效果以防止文字溢出 */
@@ -77,60 +79,30 @@
     text-decoration: underline;
 }
 
-/* 过滤器标签 */
-.filter-label {
-    font-weight: bold;
-    color: #212529; /* Bootstrap 文本颜色 */
-}
-
-/* 距离滑块和显示值 */
-.distance-slider {
-    width: 100%;
-}
-
-.distance-value {
-    font-weight: bold;
-    margin-left: 10px;
-    min-width: 50px;
-}
-
-/* 分类选择框 */
-.category-select {
-    width: 100%;
-}
-
-/* 搜索输入框 */
-.search-input {
-    width: 100%;
-}
-
-/* 排序图标 */
-.sort-icons {
-    display: inline-flex;
+/* 取消预订按钮样式 */
+.cancel-button {
+    display: flex;
     align-items: center;
-    gap: 5px;
-    margin-left: 5px;
+    justify-content: center;
+    transition: background-color 0.3s, transform 0.3s;
 }
 
-.sort-icons i {
-    cursor: pointer;
-    color: #6c757d; /* Bootstrap 次要颜色 */
-    transition: color 0.3s, transform 0.3s;
+.cancel-button i {
+    font-size: 1.2rem;
 }
 
-.sort-icons i:hover {
-    color: #0d6efd; /* Bootstrap 主蓝色 */
-    transform: scale(1.2);
-}
-
-/* 收藏复选框 */
-.form-check-input {
-    cursor: pointer;
-    transition: transform 0.3s;
-}
-
-.form-check-input:hover {
+.cancel-button:hover {
+    background-color: #dc3545; /* Bootstrap danger color */
     transform: scale(1.1);
+}
+
+/* 描述单元格悬浮效果 */
+.description-cell:hover {
+    overflow: visible;
+    white-space: normal;
+    background-color: rgba(0, 123, 255, 0.05);
+    padding: 5px;
+    border-radius: 5px;
 }
 
 /* 用户反馈消息 */
@@ -152,21 +124,33 @@
     to { opacity: 1; }
 }
 
+/* 表格容器 */
+.table-container {
+    width: 100%;
+    margin-top: 20px;
+    overflow-x: auto; /* 允许横向滚动 */
+}
+
 /* 响应式调整 */
 @media (max-width: 768px) {
-    .locations-container {
+    .Booking {
         padding: 10px;
     }
 
-    .location-title {
+    .booking-title {
         font-size: 2rem;
     }
 
-    .filter-item {
-        margin-bottom: 15px;
+    .booking-table th, 
+    .booking-table td {
+        padding: 8px 10px;
     }
 
-    .sort-icons i {
-        font-size: 18px;
+    .cancel-button {
+        padding: 5px;
+    }
+
+    .cancel-button i {
+        font-size: 1rem;
     }
 }

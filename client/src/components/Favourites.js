@@ -1,150 +1,256 @@
-// Favourites.js
+// src/components/Favourites.js
 import React from 'react';
-import './../styles/Events.css';
+import './../styles/Favourite.css';
 import { Link } from 'react-router-dom';
+import { Container, Row, Col, Table, Button, Alert } from 'react-bootstrap';
 
 class Favourites extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            favourites: [], // 存储收藏位置的详细信息
-            allLocations: [], // 存储所有位置的数据
-            allEvents: [], // 存储所有事件的数据
-            isLoading: true, // 加载状态
-            error: null, // 错误信息
+            username: '',
+            favourites: [],
+            isLoading: true,
+            error: null,
+            showSuccess: false, // 显示成功消息
+            showError: false,   // 显示错误消息
+            message: '',        // 消息内容
         };
     }
 
-    async componentDidMount() {
+    componentDidMount() {
+        this.getCurrentUser();
+    }
+
+    getCurrentUser = async () => {
         try {
-            // 获取收藏的 locIds
-            let favourites = JSON.parse(localStorage.getItem('favourites') || '[]');
-            // 确保 locId 的类型一致（假设 locId 是数字）
-            favourites = favourites.map(id => Number(id));
-
-            if (favourites.length === 0) {
-                this.setState({ favourites: [], isLoading: false });
-                return;
+            const response = await fetch('http://localhost:3001/currentUser', {
+                method: 'GET',
+                credentials: 'include',
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch current user');
             }
+            const data = await response.json();
+            this.setState({ username: data.username }, () => {
+                this.fetchFavourites();
+            });
+        } catch (error) {
+            console.error('Error fetching current user:', error);
+            this.setState({ error: error.message, isLoading: false });
+        }
+    };
 
-            // 并行获取所有位置和所有事件
-            const [locationsResponse, eventsResponse] = await Promise.all([
-                fetch('http://localhost:3001/locations/show'),
-                fetch('http://localhost:3001/events/all'),
+    fetchFavourites = async () => {
+        const { username } = this.state;
+
+        try {
+            // 并行获取收藏位置和所有事件
+            const [favouritesResponse, eventsResponse] = await Promise.all([
+                fetch(`http://localhost:3001/favourites/${username}`, {
+                    method: 'GET',
+                    credentials: 'include',
+                }),
+                fetch('http://localhost:3001/events/all', {
+                    method: 'GET',
+                    credentials: 'include',
+                }),
             ]);
 
-            if (!locationsResponse.ok) {
-                throw new Error('Failed to fetch locations');
+            if (!favouritesResponse.ok) {
+                throw new Error('Failed to fetch favourites');
             }
 
             if (!eventsResponse.ok) {
                 throw new Error('Failed to fetch events');
             }
 
-            const allLocations = await locationsResponse.json();
-            const allEvents = await eventsResponse.json();
+            const favouritesData = await favouritesResponse.json();
+            const eventsData = await eventsResponse.json();
+
+            const allEvents = eventsData; // 所有事件列表
 
             // 计算每个 locId 的事件数量
             const eventCountMap = this.getEventCountMap(allEvents);
 
-            // 过滤出收藏的位置信息
-            const favouritesWithDetails = favourites.map(locId => {
-                const location = allLocations.find(loc => loc.locId === locId);
-                if (location) {
-                    const numEvents = eventCountMap[locId] || 0;
-                    return { locId, name: location.name, numEvents };
-                } else {
-                    console.warn(`Location with ID ${locId} not found.`);
-                    return { locId, name: 'Unknown', numEvents: 0 };
-                }
+            // 合并收藏位置和事件数量
+            const favouritesWithDetails = favouritesData.favourites.map(location => {
+                const locId = location.locId;
+                const numEvents = eventCountMap[locId] || 0;
+                return { ...location, numEvents };
             });
 
             this.setState({
                 favourites: favouritesWithDetails,
-                allLocations,
-                allEvents,
                 isLoading: false,
             });
         } catch (error) {
             console.error('Error loading favourites:', error);
             this.setState({ error: error.message, isLoading: false });
         }
-    }
+    };
 
     getEventCountMap(events) {
         const countMap = {};
         events.forEach(event => {
-            const id = Number(event.locId);
-            if (countMap[id]) {
-                countMap[id]++;
+            const locId = Number(event.locId);
+            if (countMap[locId]) {
+                countMap[locId]++;
             } else {
-                countMap[id] = 1;
+                countMap[locId] = 1;
             }
         });
         return countMap;
     }
 
-    handleRemoveFavourite = locId => {
-        // 获取当前收藏列表
-        let favourites = JSON.parse(localStorage.getItem('favourites') || '[]');
-        favourites = favourites.map(id => Number(id));
-        // 移除指定的 locId
-        favourites = favourites.filter(id => id !== locId);
-        // 更新 localStorage
-        localStorage.setItem('favourites', JSON.stringify(favourites));
-        // 更新组件状态
-        this.setState(prevState => ({
-            favourites: prevState.favourites.filter(fav => fav.locId !== locId),
-        }));
-    }
+    handleRemoveFavourite = async locId => {
+        const { username } = this.state;
+
+        try {
+            const response = await fetch('http://localhost:3001/favourites', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                    username: username,
+                    locId: locId,
+                }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data.message);
+
+                // 更新状态
+                this.setState(prevState => ({
+                    favourites: prevState.favourites.filter(fav => fav.locId !== locId),
+                    showSuccess: true,
+                    message: 'Removed from favourites!',
+                }));
+            } else {
+                const errorData = await response.json();
+                this.setState({
+                    showError: true,
+                    message: errorData.message || 'Favourites action failed.',
+                });
+            }
+        } catch (error) {
+            console.error('Error updating favourites:', error);
+            this.setState({
+                showError: true,
+                message: 'Error updating favourites.',
+            });
+        }
+    };
 
     render() {
-        const { favourites, isLoading, error } = this.state;
+        const { favourites, isLoading, error, showSuccess, showError, message } = this.state;
 
         if (isLoading) {
-            return <div className='Favourites'><p>Loading...</p></div>;
+            return (
+                <Container className='Favourites py-5'>
+                    <Row className='justify-content-center'>
+                        <Col xs={12} className='text-center'>
+                            <p>Loading...</p>
+                        </Col>
+                    </Row>
+                </Container>
+            );
         }
 
         if (error) {
-            return <div className='Favourites'><p>Error: {error}</p></div>;
+            return (
+                <Container className='Favourites py-5'>
+                    <Row className='justify-content-center'>
+                        <Col xs={12} className='text-center'>
+                            <p>Error: {error}</p>
+                        </Col>
+                    </Row>
+                </Container>
+            );
         }
 
         return (
-            <div className='Favourites'>
-                <h2>My Favourite Locations</h2>
-                {favourites.length > 0 ? (
-                    <table style={{ width: "100%" }}>
-                        <thead>
-                            <tr style={{ borderBottom: "solid" }}>
-                                <th>ID</th>
-                                <th>Location</th>
-                                <th>Num of Events</th>
-                                <th>Remove from Favourites</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {favourites.map(favourite => (
-                                <tr key={favourite.locId} style={{ borderBottom: "dashed" }}>
-                                    <td>{favourite.locId}</td>
-                                    <td>
-                                        <Link to={`/locations/${favourite.locId}`}>{favourite.name}</Link>
-                                    </td>
-                                    <td>{favourite.numEvents}</td>
-                                    <td>
-                                        <input
-                                            type="checkbox"
-                                            checked={false}
-                                            onChange={() => this.handleRemoveFavourite(favourite.locId)}
-                                        />
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                ) : (
-                    <p>No favourites added yet.</p>
+            <Container fluid className='Favourites py-4'>
+                {/* 用户反馈消息 */}
+                {showSuccess && (
+                    <Alert
+                        variant="success"
+                        onClose={() => this.setState({ showSuccess: false })}
+                        dismissible
+                        className={`fade-in ${showSuccess ? 'show' : ''}`}
+                    >
+                        <Alert.Heading>Success!</Alert.Heading>
+                        <p>{message}</p>
+                    </Alert>
                 )}
-            </div>
+                {showError && (
+                    <Alert
+                        variant="danger"
+                        onClose={() => this.setState({ showError: false })}
+                        dismissible
+                        className={`fade-in ${showError ? 'show' : ''}`}
+                    >
+                        <Alert.Heading>Error!</Alert.Heading>
+                        <p>{message}</p>
+                    </Alert>
+                )}
+
+                {/* 标题部分 */}
+                <Row className='mb-4'>
+                    <Col>
+                        <h2 className="favourites-title text-center animated-title">My Favourite Locations</h2>
+                    </Col>
+                </Row>
+
+                {/* 表格部分 */}
+                <Row>
+                    <Col>
+                        {favourites.length > 0 ? (
+                            <div className='table-container'>
+                                <Table responsive hover className='favourite-table'>
+                                    <thead className="table-primary">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Location</th>
+                                            <th>Num of Events</th>
+                                            <th>Remove from Favourites</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {favourites.map(favourite => (
+                                            <tr key={favourite.locId} className="favourite-row">
+                                                <td>{favourite.locId}</td>
+                                                <td>
+                                                    <Link to={`/locations/${favourite.locId}`} className='location-link'>{favourite.name}</Link>
+                                                </td>
+                                                <td>{favourite.numEvents}</td>
+                                                <td>
+                                                    <Button
+                                                        variant="danger"
+                                                        size="sm"
+                                                        onClick={() => this.handleRemoveFavourite(favourite.locId)}
+                                                        className='remove-button'
+                                                        aria-label={`Remove ${favourite.name} from favourites`}
+                                                    >
+                                                        <i className="bi bi-trash"></i>
+                                                    </Button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </Table>
+                            </div>
+                        ) : (
+                            <Row className='justify-content-center'>
+                                <Col xs={12} className='text-center'>
+                                    <p>No favourites added yet.</p>
+                                </Col>
+                            </Row>
+                        )}
+                    </Col>
+                </Row>
+            </Container>
         );
     }
 }

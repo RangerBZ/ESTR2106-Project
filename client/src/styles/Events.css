@@ -1,40 +1,111 @@
-.Events {
-    background-color:azure;
-    padding: 4vh;
-} 
+/* src/styles/Events.css */
 
-.events-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.Events {
+    background: linear-gradient(135deg, #ece9e6, #ffffff);
+    min-height: 100vh;
 }
 
 .title {
-    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 2.5rem;
+    color: #0d6efd;
+    position: relative;
+    overflow: hidden;
 }
 
-.price-filter {
-    display: flex,inline-block;
-    align-items: center;
+.animated-title {
+    animation: slideIn 1s ease-out;
 }
 
-.price-filter label {
-    margin-right: 10px;
-    font-weight: bold;
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
-.price-filter input {
+.events-table {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.event-row:hover {
+    box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+    background: rgba(0, 123, 255, 0.1);
+}
+
+.like-icon {
+    cursor: pointer;
+    transition: fill 0.3s, transform 0.3s;
+}
+
+.like-icon:hover {
+    transform: scale(1.1);
+    fill: #ff6b6b; /* 亮红色 */
+}
+
+.book-button {
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.book-button:hover:not(:disabled) {
+    transform: scale(1.05);
+    background-color: #0b5ed7;
+}
+
+.title-cell{
+    margin-left: 10px;
+    padding-left: 10px;
+}
+
+.date-cell{
+    max-width: 250px;
+}
+.description-cell {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.description-cell:hover {
+    overflow: visible;
+    white-space: normal;
+    background-color: rgba(0, 123, 255, 0.05);
     padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 100px;
+    border-radius: 5px;
 }
 
-table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-  }
-  .like-cell {
-    text-align: center;        
-    vertical-align: middle;   
+.alert {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.alert.show {
+    opacity: 1;
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+.bi-star{
+    font-size: 22px;
+}
+
+.bi-star-fill{
+    font-size: 22px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }

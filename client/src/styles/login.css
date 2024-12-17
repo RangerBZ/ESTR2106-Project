@@ -1,0 +1,80 @@
+.login-body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff;/* 浅蓝背景 */
+    color: #333; /* 深灰文字 */
+  }
+
+  .login-title {
+    color: #1e90ff; /* 深蓝色标题 */
+    text-align: center;
+    margin-top: 50px;
+  }
+
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh; /* 减去标题的高度 */
+  }
+
+  .login-form {
+    background-color: #ffffff; /* 白色背景 */
+    padding: 30px;
+    border-radius: 8px; /* 圆角 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 轻微投影 */
+    width: 300px; /* 固定宽度 */
+  }
+
+  .login-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #1e90ff; /* 深蓝色标签 */
+  }
+
+  .login-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc; /* 浅灰边框 */
+    border-radius: 4px; /* 圆角 */
+    font-size: 14px;
+  }
+
+  .login-input:focus {
+    outline: none;
+    border-color: #1e90ff; /* 聚焦时边框颜色变蓝 */
+    box-shadow: 0 0 5px rgba(30, 144, 255, 0.5); /* 聚焦时蓝色光晕 */
+  }
+
+  .login-button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .login-submit {
+    background-color: #1e90ff; /* 深蓝背景 */
+    color: #fff; /* 白色文字 */
+  }
+
+  .login-submit:hover {
+    background-color: #4682b4; /* 浅蓝色 */
+  }
+
+  .login-register {
+    background-color: #f0f8ff; /* 浅蓝背景 */
+    color: #1e90ff; /* 蓝色文字 */
+    border: 1px solid #1e90ff; /* 蓝色边框 */
+  }
+
+  .login-register:hover {
+    background-color: #1e90ff; /* 深蓝背景 */
+    color: #fff; /* 白色文字 */
+  }
