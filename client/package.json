@@ -26,15 +26,13 @@
   "dependencies": {
     "@react-google-maps/api": "^2.20.3",
     "axios": "^1.7.9",
+    "binary-extensions": "^3.0.0",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "darkmode-js": "^1.5.7",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
-<<<<<<< HEAD
     "react-bootstrap": "^2.10.7",
-=======
->>>>>>> 2fb5d5ba1dc36d2d5fb94e2d6afb871001e1ced3
     "react-dom": "^18.3.1",
     "react-icons": "^5.4.0",
     "react-router-dom": "^7.0.2",
